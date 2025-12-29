@@ -1,0 +1,143 @@
+:root {
+    --primary-blue: #00aaff;
+    --success-green: #2ecc71;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
+
+body { background: #000; overflow: hidden; height: 100vh; width: 100vw; }
+
+.overlay {
+    position: fixed; width: 100%; height: 100%;
+    background: linear-gradient(90deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 100%);
+    z-index: 1;
+}
+
+#bg-img {
+    position: fixed; width: 100%; height: 100%;
+    object-fit: cover; z-index: 0; filter: brightness(0.6);
+}
+
+/* ÍCONE DE MÚSICA (SEM BOLA, MAIS PRA CIMA) */
+#musicIcon {
+    position: fixed;
+    top: 25px;
+    right: 35px;
+    z-index: 10;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    text-shadow: 0 0 10px rgba(0,0,0,0.5);
+    transition: 0.3s;
+    opacity: 0.8;
+}
+
+#musicIcon:hover { opacity: 1; transform: scale(1.1); color: var(--primary-blue); }
+
+.main-container { position: relative; z-index: 2; height: 100%; display: flex; }
+
+.sidebar {
+    width: 450px; height: 100%;
+    padding: 0 60px;
+    display: flex; flex-direction: column;
+    justify-content: center;
+}
+
+.logo { font-weight: 800; font-size: 3rem; color: #fff; letter-spacing: -2px; }
+.logo span { color: var(--primary-blue); }
+.tagline { color: rgba(255,255,255,0.5); font-size: 0.7rem; letter-spacing: 5px; margin-bottom: 60px; }
+
+/* REMOVIDO QUADRADO PRETO - ELEMENTOS VOANDO */
+.form-wrapper {
+    animation: fadeIn 0.6s ease;
+}
+
+h2 { color: #fff; font-size: 0.9rem; margin-bottom: 25px; letter-spacing: 2px; font-weight: 300; }
+
+.input-group {
+    background: rgba(255, 255, 255, 0.08); /* Fundo quase invisível só pra leitura */
+    border-bottom: 2px solid rgba(255,255,255,0.1);
+    border-radius: 4px; padding: 18px;
+    margin-bottom: 20px; display: flex; align-items: center;
+    transition: 0.3s;
+}
+
+.input-group:focus-within { border-bottom-color: var(--primary-blue); background: rgba(255,255,255,0.12); }
+.input-group i { color: var(--primary-blue); margin-right: 15px; font-size: 1.1rem; }
+
+input { background: transparent; border: none; color: #fff; width: 100%; outline: none; font-size: 1rem; }
+
+.btn-action {
+    width: 100%; padding: 20px; border: none; border-radius: 4px;
+    font-weight: 800; color: #fff; cursor: pointer; transition: 0.3s;
+    letter-spacing: 1px; text-transform: uppercase;
+}
+
+.login { background: var(--primary-blue); }
+.register { background: var(--success-green); }
+
+.btn-action:hover { filter: brightness(1.2); transform: translateY(-2px); }
+
+.gender-selection { display: flex; gap: 10px; margin-bottom: 20px; }
+.g-btn {
+    flex: 1; padding: 15px; background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1); color: #fff;
+    border-radius: 4px; cursor: pointer; font-weight: 600;
+}
+.g-btn.active { background: var(--primary-blue); border-color: var(--primary-blue); }
+
+.footer-text { color: rgba(255,255,255,0.4); font-size: 0.85rem; margin-top: 30px; text-align: center; }
+.footer-text span { color: var(--primary-blue); cursor: pointer; font-weight: 600; }
+
+/* Container que cria o efeito de desfoque atrás dos elementos */
+.glass-content {
+    background: rgba(255, 255, 255, 0.01); /* Quase invisível */
+    backdrop-filter: blur(15px); /* O desfoque da imagem de fundo */
+    -webkit-backdrop-filter: blur(15px);
+    padding: 40px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.05); /* Borda finíssima */
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* Ajuste nos inputs para combinarem com o fundo desfoque */
+.input-group {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+}
+
+/* Botão de música apenas ícone no topo direito */
+#musicIcon {
+    position: fixed;
+    top: 30px;
+    right: 40px;
+    z-index: 100;
+    color: white;
+    font-size: 22px;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: 0.3s;
+}
+
+#musicIcon:hover {
+    opacity: 1;
+    color: var(--primary-blue);
+    transform: scale(1.2);
+}
+.shake {
+    animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes shake {
+    10%, 90% { transform: translate3d(-1px, 0, 0); }
+    20%, 80% { transform: translate3d(2px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+    40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+
+@keyframes fadeIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
