@@ -2,7 +2,7 @@ let selectedGender = null;
 const audio = document.getElementById('myAudio');
 const musicIcon = document.getElementById('musicIcon');
 
-// --- CONTROLE DE MÚSICA ---
+// --- 1. CONTROLE DE MÚSICA (Original) ---
 function togglePlay() {
     if (audio.paused) {
         audio.play();
@@ -16,14 +16,13 @@ function togglePlay() {
 }
 
 window.onload = () => {
-    // No mobile, o autoplay é bloqueado, tentamos dar play no carregamento
     audio.play().catch(() => {
         musicIcon.classList.remove('fa-pause');
         musicIcon.classList.add('fa-play');
     });
 };
 
-// --- NAVEGAÇÃO ---
+// --- 2. NAVEGAÇÃO E GÊNERO (Original) ---
 function toggleForm(type) {
     if(type === 'reg') {
         document.getElementById('login-box').style.display = 'none';
@@ -42,63 +41,67 @@ function selectGender(gender) {
     else document.getElementById('f-btn').classList.add('active');
 }
 
-// --- COMUNICAÇÃO EXCLUSIVA MOBILE (GECKOJU) ---
-
+// --- 3. FUNÇÕES DE ENVIO PARA O SERVIDOR (MOBILE) ---
 function login() {
     const pass = document.getElementById('login-pass').value;
     if (pass.length > 0) {
-        // Formato Geckoju: Envia um objeto JSON como string
-        window.geckoju.send(JSON.stringify({
-            event: "server:onPlayerLogin",
-            password: pass
-        }));
+        // Envia para o Geckoju no formato que o sscanf do seu Pawn entende
+        if (window.geckoju) {
+            window.geckoju.send(JSON.stringify({
+                event: "server:onPlayerLogin",
+                password: pass
+            }));
+        }
     } else {
-        showError("Por favor, digite sua senha.");
+        showError("Digite sua senha!");
     }
 }
 
 function register() {
     const pass = document.getElementById('reg-pass').value;
     if (pass.length > 0 && selectedGender) {
-        window.geckoju.send(JSON.stringify({
-            event: "server:onPlayerRegister",
-            password: pass,
-            gender: selectedGender
-        }));
+        if (window.geckoju) {
+            window.geckoju.send(JSON.stringify({
+                event: "server:onPlayerRegister",
+                password: pass,
+                gender: selectedGender
+            }));
+        }
+        // Feedback visual de que foi enviado
         setTimeout(() => { toggleForm('log'); }, 200);
     } else {
-        showError("Preencha a senha e selecione o gênero.");
+        showError("Senha ou Gênero faltando!");
     }
 }
 
-// --- RECEBER DADOS DO SERVIDOR NO MOBILE ---
-
-window.geckoju.onData = function(data) {
-    try {
-        const obj = JSON.parse(data);
-        
-        // Exemplo: se o servidor enviar {"action": "error", "msg": "Senha incorreta"}
-        if(obj.action === "error") {
-            showError(obj.msg);
-        }
-    } catch(e) {
-        console.log("Erro ao processar dados: " + e);
-    }
-};
-
-// Função para mostrar erro
+// --- 4. FUNÇÃO DE ERRO (A que você pediu para o Pawn acionar) ---
 function showError(msg) {
     const inputGroup = document.querySelector('.input-group');
     const input = document.getElementById('login-pass');
     
     input.value = "";
-    input.placeholder = msg;
+    input.placeholder = msg; // Aqui aparece o "SENHA INCORRETA" vindo do Pawn
     inputGroup.style.borderColor = "#ff4444";
     inputGroup.style.boxShadow = "0 0 10px rgba(255, 68, 68, 0.2)";
 
+    // Resetar a cor após 3 segundos
     setTimeout(() => {
+        input.placeholder = "SUA SENHA";
         inputGroup.style.borderColor = "rgba(255, 255, 255, 0.1)";
         inputGroup.style.boxShadow = "none";
-        input.placeholder = "SUA SENHA";
     }, 3000);
 }
+
+// --- 5. PONTE DE RECEBIMENTO (Ouvinte do Mobile) ---
+// Isso aqui permite que o Geckoju_Emit do seu Pawn fale com o JS
+window.geckoju.onData = function(data) {
+    try {
+        const obj = JSON.parse(data);
+        // Se o servidor mandar action: "error", chamamos sua função showError
+        if(obj.action === "error") {
+            showError(obj.msg);
+        }
+    } catch(e) {
+        console.log("Erro ao processar dados do servidor: " + e);
+    }
+};
