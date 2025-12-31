@@ -42,11 +42,13 @@ function selectGender(gender) {
 }
 
 // --- 3. FUNÇÕES DE ENVIO PARA O SERVIDOR (CORRIGIDAS PARA O PAWN) ---
+// --- 3. ENVIO DE DADOS PARA O SERVIDOR (CORRIGIDO) ---
 function login() {
     const pass = document.getElementById('login-pass').value;
     if (pass.length > 0) {
         if (window.geckoju) {
-            // Enviando como string simples para o sscanf p<:> do Pawn
+            // Enviando como string simples para bater com o sscanf do Pawn
+            // Formato: server:onPlayerLogin:SENHA
             window.geckoju.send("server:onPlayerLogin:" + pass);
         }
     } else {
@@ -58,9 +60,11 @@ function register() {
     const pass = document.getElementById('reg-pass').value;
     if (pass.length > 0 && selectedGender) {
         if (window.geckoju) {
-            // Enviando como string simples para o sscanf p<:> do Pawn
+            // Enviando como string simples para bater com o sscanf do Pawn
+            // Formato: server:onPlayerRegister:SENHA:GENERO
             window.geckoju.send("server:onPlayerRegister:" + pass + ":" + selectedGender);
         }
+        // Feedback visual
         setTimeout(() => { toggleForm('log'); }, 200);
     } else {
         showError("Senha ou Gênero faltando!");
