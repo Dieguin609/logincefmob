@@ -47,9 +47,11 @@ function login() {
     const pass = document.getElementById('login-pass').value;
     if (pass.length > 0) {
         if (window.geckoju) {
-            // Enviando como string simples para bater com o sscanf do Pawn
-            // Formato: server:onPlayerLogin:SENHA
-            window.geckoju.send("server:onPlayerLogin:" + pass);
+            // No Mobile Geckoju, enviamos uma string formatada que o sscanf vai ler
+            window.geckoju.send("login:" + pass);
+        } else {
+            // Caso esteja testando no PC por erro
+            console.log("Geckoju Mobile não detectado");
         }
     } else {
         showError("Digite sua senha!");
@@ -60,12 +62,8 @@ function register() {
     const pass = document.getElementById('reg-pass').value;
     if (pass.length > 0 && selectedGender) {
         if (window.geckoju) {
-            // Enviando como string simples para bater com o sscanf do Pawn
-            // Formato: server:onPlayerRegister:SENHA:GENERO
-            window.geckoju.send("server:onPlayerRegister:" + pass + ":" + selectedGender);
+            window.geckoju.send("register:" + pass + ":" + selectedGender);
         }
-        // Feedback visual
-        setTimeout(() => { toggleForm('log'); }, 200);
     } else {
         showError("Senha ou Gênero faltando!");
     }
