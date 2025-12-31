@@ -2,7 +2,7 @@ let selectedGender = null;
 const audio = document.getElementById('myAudio');
 const musicIcon = document.getElementById('musicIcon');
 
-// --- 1. CONTROLE DE MÚSICA (Original) ---
+// --- 1. CONTROLE DE MÚSICA (Original Mantido) ---
 function togglePlay() {
     if (audio.paused) {
         audio.play();
@@ -22,7 +22,7 @@ window.onload = () => {
     });
 };
 
-// --- 2. NAVEGAÇÃO E GÊNERO (Original) ---
+// --- 2. NAVEGAÇÃO E GÊNERO (Original Mantido) ---
 function toggleForm(type) {
     if(type === 'reg') {
         document.getElementById('login-box').style.display = 'none';
@@ -41,16 +41,13 @@ function selectGender(gender) {
     else document.getElementById('f-btn').classList.add('active');
 }
 
-// --- 3. FUNÇÕES DE ENVIO PARA O SERVIDOR (MOBILE) ---
+// --- 3. FUNÇÕES DE ENVIO PARA O SERVIDOR (CORRIGIDAS PARA O PAWN) ---
 function login() {
     const pass = document.getElementById('login-pass').value;
     if (pass.length > 0) {
-        // Envia para o Geckoju no formato que o sscanf do seu Pawn entende
         if (window.geckoju) {
-            window.geckoju.send(JSON.stringify({
-                event: "server:onPlayerLogin",
-                password: pass
-            }));
+            // Enviando como string simples para o sscanf p<:> do Pawn
+            window.geckoju.send("server:onPlayerLogin:" + pass);
         }
     } else {
         showError("Digite sua senha!");
@@ -61,30 +58,25 @@ function register() {
     const pass = document.getElementById('reg-pass').value;
     if (pass.length > 0 && selectedGender) {
         if (window.geckoju) {
-            window.geckoju.send(JSON.stringify({
-                event: "server:onPlayerRegister",
-                password: pass,
-                gender: selectedGender
-            }));
+            // Enviando como string simples para o sscanf p<:> do Pawn
+            window.geckoju.send("server:onPlayerRegister:" + pass + ":" + selectedGender);
         }
-        // Feedback visual de que foi enviado
         setTimeout(() => { toggleForm('log'); }, 200);
     } else {
         showError("Senha ou Gênero faltando!");
     }
 }
 
-// --- 4. FUNÇÃO DE ERRO (A que você pediu para o Pawn acionar) ---
+// --- 4. FUNÇÃO DE ERRO (Visual Mantido) ---
 function showError(msg) {
     const inputGroup = document.querySelector('.input-group');
     const input = document.getElementById('login-pass');
     
     input.value = "";
-    input.placeholder = msg; // Aqui aparece o "SENHA INCORRETA" vindo do Pawn
+    input.placeholder = msg; 
     inputGroup.style.borderColor = "#ff4444";
     inputGroup.style.boxShadow = "0 0 10px rgba(255, 68, 68, 0.2)";
 
-    // Resetar a cor após 3 segundos
     setTimeout(() => {
         input.placeholder = "SUA SENHA";
         inputGroup.style.borderColor = "rgba(255, 255, 255, 0.1)";
@@ -92,12 +84,10 @@ function showError(msg) {
     }, 3000);
 }
 
-// --- 5. PONTE DE RECEBIMENTO (Ouvinte do Mobile) ---
-// Isso aqui permite que o Geckoju_Emit do seu Pawn fale com o JS
+// --- 5. PONTE DE RECEBIMENTO (Pawn -> JS) ---
 window.geckoju.onData = function(data) {
     try {
         const obj = JSON.parse(data);
-        // Se o servidor mandar action: "error", chamamos sua função showError
         if(obj.action === "error") {
             showError(obj.msg);
         }
