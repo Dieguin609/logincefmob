@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <title>SkyPixel Login</title>
+    <title>Login / Registro</title>
 </head>
 <body>
     <div class="overlay"></div>
@@ -23,39 +23,38 @@
 
     <div class="main-container">
         <aside class="sidebar">
-    <div class="header">
-        <h1 class="logo">SKY<span>PIXEL</span></h1>
-        <p class="tagline">ROLEPLAY</p>
-    </div>
-
-    <div class="glass-content">
-        <div id="login-box" class="form-wrapper">
-            <h2>CONECTAR</h2>
-            <div class="input-group">
-                <i class="fas fa-lock"></i>
-                <input type="password" id="login-pass" placeholder="SUA SENHA">
-            </div>
-            <button class="btn-action login" onclick="login()">ENTRAR NO SERVIDOR</button>
-            <p class="footer-text">Novo por aqui? <span onclick="toggleForm('reg')">Criar conta</span></p>
-        </div>
-
-        <div id="register-box" class="form-wrapper" style="display: none;">
-            <h2>REGISTRAR</h2>
-            <div class="input-group">
-                <i class="fas fa-key"></i>
-                <input type="password" id="reg-pass" placeholder="ESCOLHA UMA SENHA">
-            </div>
-            
-            <div class="gender-selection">
-                <button class="g-btn" id="m-btn" onclick="selectGender('M')">HOMEM</button>
-                <button class="g-btn" id="f-btn" onclick="selectGender('F')">MULHER</button>
+            <div class="header">
+                <h1 class="logo">LOGIN<span>/REGISTRO</span></h1>
             </div>
 
-            <button class="btn-action register" onclick="register()">CONCLUIR REGISTRO</button>
-            <p class="footer-text">Já possui conta? <span onclick="toggleForm('log')">Voltar</span></p>
-        </div>
-    </div>
-</aside>
+            <div class="glass-content">
+                <div id="login-box" class="form-wrapper">
+                    <h2>CONECTAR</h2>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="login-pass" placeholder="SUA SENHA">
+                    </div>
+                    <button class="btn-action login" onclick="login()">ENTRAR NO SERVIDOR</button>
+                    <p class="footer-text">Novo por aqui? <span onclick="toggleForm('reg')">Criar conta</span></p>
+                </div>
+
+                <div id="register-box" class="form-wrapper" style="display: none;">
+                    <h2>REGISTRAR</h2>
+                    <div class="input-group">
+                        <i class="fas fa-key"></i>
+                        <input type="password" id="reg-pass" placeholder="ESCOLHA UMA SENHA">
+                    </div>
+                    
+                    <div class="gender-selection">
+                        <button class="g-btn" id="m-btn" onclick="selectGender('M')">HOMEM</button>
+                        <button class="g-btn" id="f-btn" onclick="selectGender('F')">MULHER</button>
+                    </div>
+
+                    <button class="btn-action register" onclick="register()">CONCLUIR REGISTRO</button>
+                    <p class="footer-text">Já possui conta? <span onclick="toggleForm('log')">Voltar</span></p>
+                </div>
+            </div>
+        </aside>
     </div>
 
     <script src="script.js"></script>
