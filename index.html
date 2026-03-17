@@ -6,28 +6,36 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <title>Login / Registro</title>
+    <title>Eixo Central - Login</title>
+    <style>
+        :root { --primary-yellow: #f1c40f; }
+        .logo span { color: var(--primary-yellow) !important; }
+        .input-group i { color: var(--primary-yellow) !important; }
+        .btn-action.login, .btn-action.register { 
+            background: var(--primary-yellow) !important; 
+            color: black !important; 
+        }
+        .footer-text span { color: var(--primary-yellow) !important; }
+        #error-msg {
+            color: #ff4444; font-size: 0.75rem; font-weight: 800;
+            text-align: center; margin-bottom: 15px; display: none; text-transform: uppercase;
+        }
+    </style>
 </head>
 <body>
     <div class="overlay"></div>
-    
-    <div class="bg-container">
-        <img src="fundo.png" id="bg-img">
-    </div>
+    <div class="bg-container"><img src="fundo.png" id="bg-img"></div>
 
     <i id="musicIcon" class="fas fa-pause" onclick="togglePlay()"></i>
-
-    <audio id="myAudio" loop>
-        <source src="musica.mp3" type="audio/mpeg">
-    </audio>
+    <audio id="myAudio" loop><source src="musica.mp3" type="audio/mpeg"></audio>
 
     <div class="main-container">
         <aside class="sidebar">
-            <div class="header">
-                <h1 class="logo">LOGIN<span>/REGISTRO</span></h1>
-            </div>
+            <div class="header"><h1 class="logo">EIXO<span>CENTRAL</span></h1></div>
 
             <div class="glass-content">
+                <div id="error-msg">ESTA CONTA JÁ EXISTE!</div>
+
                 <div id="login-box" class="form-wrapper">
                     <h2>CONECTAR</h2>
                     <div class="input-group">
@@ -39,18 +47,10 @@
                 </div>
 
                 <div id="register-box" class="form-wrapper" style="display: none;">
-                    <h2>REGISTRAR</h2>
-                    <div class="input-group">
-                        <i class="fas fa-key"></i>
-                        <input type="password" id="reg-pass" placeholder="ESCOLHA UMA SENHA">
-                    </div>
+                    <h2>BEM-VINDO</h2>
+                    <p style="color: #aaa; font-size: 0.7rem; margin-bottom: 20px;">Você não possui uma conta vinculada a este nome.</p>
                     
-                    <div class="gender-selection">
-                        <button class="g-btn" id="m-btn" onclick="selectGender('M')">HOMEM</button>
-                        <button class="g-btn" id="f-btn" onclick="selectGender('F')">MULHER</button>
-                    </div>
-
-                    <button class="btn-action register" onclick="register()">CONCLUIR REGISTRO</button>
+                    <button class="btn-action register" onclick="checkRegister()">CRIAR NOVO PERSONAGEM</button>
                     <p class="footer-text">Já possui conta? <span onclick="toggleForm('log')">Voltar</span></p>
                 </div>
             </div>
@@ -58,5 +58,19 @@
     </div>
 
     <script src="script.js"></script>
+    <script>
+        function mostrarErroConta() {
+            document.getElementById('error-msg').style.display = 'block';
+            setTimeout(() => { document.getElementById('error-msg').style.display = 'none'; }, 5000);
+        }
+
+        // Função que só avisa o servidor que o cara quer criar conta
+        function checkRegister() {
+            if (window.geckoju) {
+                // O servidor recebe o sinal "check", vê que não tem conta e abre o criacao.html
+                window.geckoju.send("checkRegister:null");
+            }
+        }
+    </script>
 </body>
 </html>

@@ -2,7 +2,7 @@ let selectedGender = null;
 const audio = document.getElementById('myAudio');
 const musicIcon = document.getElementById('musicIcon');
 
-// --- 1. CONTROLE DE MÚSICA (Original Mantido) ---
+// --- 1. CONTROLE DE MÚSICA ---
 function togglePlay() {
     if (audio.paused) {
         audio.play();
@@ -22,8 +22,13 @@ window.onload = () => {
     });
 };
 
-// --- 2. NAVEGAÇÃO E GÊNERO (Original Mantido) ---
+// --- 2. NAVEGAÇÃO ---
 function toggleForm(type) {
+    // Resetar avisos de erro ao trocar de aba
+    const inputGroup = document.querySelector('.input-group');
+    const input = document.getElementById('login-pass');
+    inputGroup.style.borderColor = "rgba(255, 255, 255, 0.1)";
+
     if(type === 'reg') {
         document.getElementById('login-box').style.display = 'none';
         document.getElementById('register-box').style.display = 'block';
@@ -33,43 +38,31 @@ function toggleForm(type) {
     }
 }
 
-function selectGender(gender) {
-    selectedGender = gender;
-    document.getElementById('m-btn').classList.remove('active');
-    document.getElementById('f-btn').classList.remove('active');
-    if(gender === 'M') document.getElementById('m-btn').classList.add('active');
-    else document.getElementById('f-btn').classList.add('active');
-}
+// --- 3. ENVIO PARA O SERVIDOR ---
 
-// --- 3. FUNÇÕES DE ENVIO PARA O SERVIDOR (CORRIGIDAS PARA O PAWN) ---
-// --- 3. ENVIO DE DADOS PARA O SERVIDOR (CORRIGIDO) ---
 function login() {
     const pass = document.getElementById('login-pass').value;
     if (pass.length > 0) {
         if (window.geckoju) {
-            // No Mobile Geckoju, enviamos uma string formatada que o sscanf vai ler
             window.geckoju.send("login:" + pass);
-        } else {
-            // Caso esteja testando no PC por erro
-            console.log("Geckoju Mobile não detectado");
         }
     } else {
-        showError("Digite sua senha!");
+        showError("DIGITE SUA SENHA!");
     }
 }
 
+// ESSA É A FUNÇÃO QUE VOCÊ QUERIA: Só verifica e manda pro criacao.html via Pawn
 function register() {
-    const pass = document.getElementById('reg-pass').value;
-    if (pass.length > 0 && selectedGender) {
-        if (window.geckoju) {
-            window.geckoju.send("register:" + pass + ":" + selectedGender);
-        }
+    if (window.geckoju) {
+        // Envia o sinal "checkRegister". 
+        // No Pawn, se DOF2_FileExists for falso, você abre o criacao.html
+        window.geckoju.send("checkRegister:null");
     } else {
-        showError("Senha ou Gênero faltando!");
+        console.log("Servidor não detectado - Teste de Clique");
     }
 }
 
-// --- 4. FUNÇÃO DE ERRO (Visual Mantido) ---
+// --- 4. FUNÇÃO DE ERRO VISUAL ---
 function showError(msg) {
     const inputGroup = document.querySelector('.input-group');
     const input = document.getElementById('login-pass');
@@ -86,14 +79,17 @@ function showError(msg) {
     }, 3000);
 }
 
-// --- 5. PONTE DE RECEBIMENTO (Pawn -> JS) ---
-window.geckoju.onData = function(data) {
-    try {
-        const obj = JSON.parse(data);
-        if(obj.action === "error") {
-            showError(obj.msg);
+// --- 5. RECEBIMENTO DO SERVIDOR ---
+if (window.geckoju) {
+    window.geckoju.onData = function(data) {
+        // Se o servidor quiser mostrar um erro (tipo "Conta já existe")
+        if(data === "erro_conta") {
+            // Se você criou a div error-msg no HTML
+            const errorDiv = document.getElementById('error-msg');
+            if(errorDiv) {
+                errorDiv.style.display = 'block';
+                setTimeout(() => { errorDiv.style.display = 'none'; }, 5000);
+            }
         }
-    } catch(e) {
-        console.log("Erro ao processar dados do servidor: " + e);
-    }
-};
+    };
+}

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --primary: #f1c40f; --danger: #ff4444; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
+        
+        body { background: transparent; height: 100vh; width: 100vw; overflow: hidden; display: flex; align-items: center; }
+
+        /* MENU ACHATADO E COMPACTO */
+        .sidebar {
+            width: 280px; height: auto; max-height: 85vh; margin-left: 20px;
+            background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.1); border-left: 4px solid var(--primary);
+            border-radius: 8px; padding: 20px; color: white; display: flex; flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        h1 { font-weight: 800; font-size: 1rem; text-transform: uppercase; margin-bottom: 15px; text-align: center; letter-spacing: 1px; }
+        h1 span { color: var(--primary); }
+
+        .section { margin-bottom: 12px; position: relative; }
+        .section p { font-weight: 600; font-size: 0.6rem; text-transform: uppercase; color: #aaa; margin-bottom: 6px; }
+
+        /* INPUT DE SENHA */
+        .input-senha {
+            width: 100%; padding: 10px; background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 4px;
+            color: white; font-size: 0.75rem; outline: none; transition: 0.3s;
+        }
+        .input-senha:focus { border-color: var(--primary); background: rgba(255,255,255,0.1); }
+
+        /* GRID QUADRADINHO */
+        .grid-options { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+        .box-opt {
+            aspect-ratio: 1/1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+            display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.8rem; border-radius: 3px;
+        }
+        .box-opt.active { background: var(--primary); color: black; border-color: var(--primary); }
+
+        /* BLOQUEIO CABELO */
+        .locked { opacity: 0.3; filter: grayscale(1); }
+        .badge-locked {
+            position: absolute; top: 0; right: 0; background: var(--danger);
+            color: white; font-size: 0.45rem; padding: 1px 4px; border-radius: 2px;
+        }
+
+        /* SETAS DE GIRAR NO CENTRO */
+        .center-rotate {
+            position: fixed; left: 55%; top: 50%; transform: translate(-50%, -50%);
+            width: 420px; display: flex; justify-content: space-between; pointer-events: none;
+        }
+        .arrow-rotate {
+            pointer-events: auto; background: rgba(0,0,0,0.4); border: 1px solid var(--primary);
+            color: var(--primary); width: 45px; height: 45px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: 1rem;
+        }
+
+        /* BOTÃO FINALIZAR */
+        .btn-finish {
+            margin-top: 10px; background: var(--primary); border: none;
+            padding: 12px; color: black; font-weight: 800; border-radius: 4px;
+            cursor: pointer; text-transform: uppercase; font-size: 0.7rem; transition: 0.3s;
+        }
+        .btn-finish:active { transform: scale(0.95); opacity: 0.8; }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <h1>EIXO<span>CENTRAL</span></h1>
+
+        <div class="section">
+            <p>Sua Senha</p>
+            <input type="password" id="char-pass" class="input-senha" placeholder="Senha da conta...">
+        </div>
+
+        <div class="section">
+            <p>Gênero</p>
+            <div class="grid-options">
+                <div id="m-btn" class="box-opt" onclick="setGender('M', 58)"><i class="fas fa-mars"></i></div>
+                <div id="f-btn" class="box-opt" onclick="setGender('F', 184)"><i class="fas fa-venus"></i></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <p>Cor de Pele</p>
+            <div class="grid-options">
+                <div class="box-opt" style="background: #ffdbac;" onclick="setSkin(1)"></div>
+                <div class="box-opt" style="background: #e0ac69;" onclick="setSkin(3)"></div>
+                <div class="box-opt" style="background: #8d5524;" onclick="setSkin(4)"></div>
+                <div class="box-opt" style="background: #3b2219;" onclick="setSkin(5)"></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <p>Cabelo</p>
+            <span class="badge-locked">BLOQUEADO</span>
+            <div class="grid-options locked">
+                <div class="box-opt"><i class="fas fa-lock"></i></div>
+                <div class="box-opt"><i class="fas fa-lock"></i></div>
+            </div>
+        </div>
+
+        <button class="btn-finish" onclick="finalizar()">Criar Personagem</button>
+    </aside>
+
+    <div class="center-rotate">
+        <div class="arrow-rotate" onmousedown="startRotate(-5)" onmouseup="stopRotate()"><i class="fas fa-undo"></i></div>
+        <div class="arrow-rotate" onmousedown="startRotate(5)" onmouseup="stopRotate()"><i class="fas fa-redo"></i></div>
+    </div>
+
+    <script>
+        let rotateTimer;
+        function setGender(g, skinId) {
+            document.querySelectorAll('.box-opt').forEach(b => b.classList.remove('active'));
+            document.getElementById(g.toLowerCase() + '-btn').classList.add('active');
+            if(window.geckoju) window.geckoju.send("setGender:" + skinId);
+        }
+        function setSkin(id) { if(window.geckoju) window.geckoju.send("setSkinColor:" + id); }
+        function startRotate(val) { rotateTimer = setInterval(() => { if(window.geckoju) window.geckoju.send("rotateChar:" + val); }, 50); }
+        function stopRotate() { clearInterval(rotateTimer); }
+        
+        function finalizar() {
+            const pass = document.getElementById('char-pass').value;
+            if(pass.length < 4) {
+                alert("Senha muito curta!");
+                return;
+            }
+            if(window.geckoju) window.geckoju.send("finishCreation:" + pass);
+        }
+    </script>
+</body>
+</html>
