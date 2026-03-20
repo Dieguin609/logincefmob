@@ -105,18 +105,18 @@
             <div class="section">
                 <p>Gênero</p>
                 <div class="grid-options">
-                    <div id="m-btn" class="box-opt" onclick="setGender('M', 58)"><i class="fas fa-mars"></i></div>
-                    <div id="f-btn" class="box-opt" onclick="setGender('F', 184)"><i class="fas fa-venus"></i></div>
+                    <div id="m-btn" class="box-opt" onclick="setGender('M')"><i class="fas fa-mars"></i></div>
+                    <div id="f-btn" class="box-opt" onclick="setGender('F')"><i class="fas fa-venus"></i></div>
                 </div>
             </div>
 
             <div class="section">
                 <p>Cor de Pele</p>
                 <div class="grid-options">
-                    <div class="box-opt" style="background: #ffdbac;" onclick="setSkin(1)"></div>
-                    <div class="box-opt" style="background: #e0ac69;" onclick="setSkin(3)"></div>
-                    <div class="box-opt" style="background: #8d5524;" onclick="setSkin(4)"></div>
-                    <div class="box-opt" style="background: #3b2219;" onclick="setSkin(5)"></div>
+                    <div class="box-opt" style="background: #ffdbac;"></div>
+                    <div class="box-opt" style="background: #e0ac69;"></div>
+                    <div class="box-opt" style="background: #8d5524;"></div>
+                    <div class="box-opt" style="background: #3b2219;"></div>
                 </div>
             </div>
 
@@ -133,15 +133,14 @@
         </aside>
 
         <div class="center-rotate">
-            <div class="arrow-rotate" onmousedown="startRotate(-5)" onmouseup="stopRotate()"><i class="fas fa-undo"></i></div>
-            <div class="arrow-rotate" onmousedown="startRotate(5)" onmouseup="stopRotate()"><i class="fas fa-redo"></i></div>
+            <div class="arrow-rotate" onclick="rotacionar('esq')"><i class="fas fa-undo"></i></div>
+            <div class="arrow-rotate" onclick="rotacionar('dir')"><i class="fas fa-redo"></i></div>
         </div>
     </div>
 
     <script>
         const audio = document.getElementById('myAudio');
         const musicIcon = document.getElementById('musicIcon');
-        let rotateTimer;
 
         // Controle de Música
         function togglePlay() {
@@ -157,7 +156,6 @@
         }
 
         function checkRegister() {
-            // No PC, para teste visual, forçamos a transição mec
             if (window.geckoju) {
                 window.geckoju.send("checkRegister:null");
             } else {
@@ -166,34 +164,38 @@
             }
         }
 
-        // ================= CHAMADAS PELO PAWN (Via Geckoju_SendEvent) =================
         function mostrarErroConta() {
             const err = document.getElementById('error-msg');
             err.style.display = 'block';
             setTimeout(() => { err.style.display = 'none'; }, 5000);
         }
 
-        // CORREÇÃO: Remove o fundo e o overlay para ficar transparente sobre o jogo!
         function liberarCriacao() {
-            // Esconde a Imagem de Fundo e o Overlay Escuro
             document.getElementById('main-bg-image').style.display = 'none';
             document.getElementById('main-bg-overlay').style.display = 'none';
-
-            // Esconde o Login e mostra a Criação
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('creation-screen').style.display = 'flex';
         }
 
-        // ================= FUNÇÕES DE CRIAÇÃO =================
-        function setGender(g, skinId) {
+        // ================= FUNÇÕES DE CRIAÇÃO (MEC) =================
+        function setGender(g) {
             document.querySelectorAll('#creation-screen .grid-options .box-opt').forEach(b => b.classList.remove('active'));
             document.getElementById(g.toLowerCase() + '-btn').classList.add('active');
-            if(window.geckoju) window.geckoju.send("setGender:" + skinId);
+            
+            // Envia os comandos cravados para não bugar o Pawn
+            if(window.geckoju) {
+                if(g === 'M') window.geckoju.send("skin_homem");
+                if(g === 'F') window.geckoju.send("skin_mulher");
+            }
         }
 
-        function setSkin(id) { if(window.geckoju) window.geckoju.send("setSkinColor:" + id); }
-        function startRotate(val) { rotateTimer = setInterval(() => { if(window.geckoju) window.geckoju.send("rotateChar:" + val); }, 50); }
-        function stopRotate() { clearInterval(rotateTimer); }
+        function rotacionar(lado) {
+            // A cada clique manda o comando de girar exato para o servidor
+            if(window.geckoju) {
+                if(lado === 'esq') window.geckoju.send("rot_esquerda");
+                if(lado === 'dir') window.geckoju.send("rot_direita");
+            }
+        }
         
         function finalizar() {
             const pass = document.getElementById('char-pass').value;
