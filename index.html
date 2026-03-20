@@ -121,7 +121,7 @@
             <div class="section">
                 <p>Gênero</p>
                 <div class="grid-options">
-                    <div id="m-btn" class="box-opt" onclick="setGender('M')"><i class="fas fa-mars"></i></div>
+                    <div id="m-btn" class="box-opt active" onclick="setGender('M')"><i class="fas fa-mars"></i></div>
                     <div id="f-btn" class="box-opt" onclick="setGender('F')"><i class="fas fa-venus"></i></div>
                 </div>
             </div>
@@ -153,6 +153,9 @@
     <script>
         const audio = document.getElementById('myAudio');
         const musicIcon = document.getElementById('musicIcon');
+        
+        // --- A MÁGICA: MEMÓRIA DO GÊNERO ---
+        let generoAtual = 'M'; // Começa como Homem por padrão
 
         function togglePlay() {
             if (audio.paused) { audio.play(); musicIcon.classList.replace('fa-play', 'fa-pause'); } 
@@ -186,7 +189,6 @@
             document.getElementById('creation-screen').style.display = 'flex';
         }
 
-        // === FUNÇÃO: VOLTAR PARA O LOGIN COM A IMAGEM DE FUNDO ===
         function voltarParaLogin() {
             document.getElementById('creation-screen').style.display = 'none';
             document.getElementById('login-screen').style.display = 'flex';
@@ -198,6 +200,8 @@
             document.querySelectorAll('#creation-screen .grid-options .box-opt').forEach(b => b.classList.remove('active'));
             document.getElementById(g.toLowerCase() + '-btn').classList.add('active');
             
+            generoAtual = g; // Grava se ele escolheu M ou F na variável
+
             if(window.geckoju) {
                 if(g === 'M') window.geckoju.send("skin_homem");
                 if(g === 'F') window.geckoju.send("skin_mulher");
@@ -207,7 +211,9 @@
         function finalizar() {
             const pass = document.getElementById('char-pass').value;
             if(pass.length < 4) return alert("Sua senha deve ter no mínimo 4 caracteres!");
-            if(window.geckoju) window.geckoju.send("finishCreation:" + pass);
+            
+            // Manda o comando pro Pawn colado com o sexo que ele escolheu por último
+            if(window.geckoju) window.geckoju.send("finish_" + generoAtual + ":" + pass);
         }
     </script>
 </body>
