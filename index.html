@@ -15,10 +15,10 @@
         #main-bg-image { position: fixed; width: 100%; height: 100%; object-fit: cover; z-index: 0; filter: brightness(0.5); }
         #main-bg-overlay { position: fixed; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1; }
         
-        /* Ícone de Música (Sempre visível) */
+        /* Ícone de Música */
         #musicIcon { position: fixed; top: 30px; right: 40px; z-index: 100; color: white; font-size: 22px; cursor: pointer; opacity: 0.6; }
 
-        /* ================= TELA DE LOGIN (Design Central) ================= */
+        /* ================= TELA DE LOGIN ================= */
         #login-screen {
             position: relative; z-index: 10; width: 100%; height: 100%;
             display: flex; justify-content: center; align-items: center;
@@ -36,16 +36,16 @@
         .input-group input { background: none; border: none; color: white; outline: none; width: 100%; font-size: 0.8rem; }
         
         .btn-action { width: 100%; padding: 15px; border: none; border-radius: 4px; color: black; font-weight: 800; cursor: pointer; text-transform: uppercase; background: var(--primary-yellow); transition: 0.3s; margin-bottom: 10px; }
-        .btn-action:hover { filter: brightness(1.1); transform: translateY(-2px); }
+        .btn-action:active { transform: scale(0.95); }
         .btn-action.register { background: transparent; color: var(--primary-yellow); border: 1px solid var(--primary-yellow); }
         
         #error-msg { color: var(--danger); font-size: 0.75rem; font-weight: 800; margin-bottom: 15px; display: none; text-transform: uppercase; }
 
-        /* ================= TELA DE CRIAÇÃO (Design Transparente/Achatado) ================= */
+        /* ================= TELA DE CRIAÇÃO ================= */
         #creation-screen {
             position: relative; z-index: 10; width: 100%; height: 100%;
-            display: none; /* COMEÇA ESCONDIDO */ align-items: center;
-            background: transparent !important; /* FORÇA A TRANSPARÊNCIA */
+            display: none; align-items: center;
+            background: transparent !important;
         }
         .creation-sidebar {
             width: 280px; height: auto; max-height: 85vh; margin-left: 20px;
@@ -62,12 +62,28 @@
         .box-opt { aspect-ratio: 1/1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.8rem; border-radius: 3px; transition: 0.2s; }
         .box-opt.active { background: var(--primary-yellow); color: black; border-color: var(--primary-yellow); }
         
-        .locked { opacity: 0.3; filter: grayscale(1); }
+        /* ESTILOS DE BLOQUEIO */
+        .locked { opacity: 0.3; filter: grayscale(1); pointer-events: none; }
         .badge-locked { position: absolute; top: 0; right: 0; background: var(--danger); color: white; font-size: 0.45rem; padding: 1px 4px; border-radius: 2px; }
-        
-        .center-rotate { position: absolute; left: 55%; top: 50%; transform: translate(-50%, -50%); width: 420px; display: flex; justify-content: space-between; pointer-events: none; }
-        .arrow-rotate { pointer-events: auto; background: rgba(0,0,0,0.5); border: 1px solid var(--primary-yellow); color: var(--primary-yellow); width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; cursor: pointer; transition: 0.2s; }
-        .arrow-rotate:active { background: var(--primary-yellow); color: black; transform: scale(0.9); }
+
+        /* BOTÃO FINALIZAR SOLTO NO CANTO INFERIOR DIREITO */
+        .btn-flutuante {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 4px;
+            color: black;
+            font-size: 0.9rem;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            background: var(--primary-yellow);
+            transition: 0.3s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .btn-flutuante:active { transform: scale(0.95); }
     </style>
 </head>
 <body>
@@ -112,11 +128,12 @@
 
             <div class="section">
                 <p>Cor de Pele</p>
-                <div class="grid-options">
-                    <div class="box-opt" style="background: #ffdbac;"></div>
-                    <div class="box-opt" style="background: #e0ac69;"></div>
-                    <div class="box-opt" style="background: #8d5524;"></div>
-                    <div class="box-opt" style="background: #3b2219;"></div>
+                <span class="badge-locked">BLOQUEADO</span>
+                <div class="grid-options locked">
+                    <div class="box-opt" style="background: #ffdbac;"><i class="fas fa-lock" style="color: rgba(0,0,0,0.5);"></i></div>
+                    <div class="box-opt" style="background: #e0ac69;"><i class="fas fa-lock" style="color: rgba(0,0,0,0.5);"></i></div>
+                    <div class="box-opt" style="background: #8d5524;"><i class="fas fa-lock" style="color: rgba(255,255,255,0.5);"></i></div>
+                    <div class="box-opt" style="background: #3b2219;"><i class="fas fa-lock" style="color: rgba(255,255,255,0.5);"></i></div>
                 </div>
             </div>
 
@@ -128,28 +145,21 @@
                     <div class="box-opt"><i class="fas fa-lock"></i></div>
                 </div>
             </div>
-
-            <button class="btn-action" style="margin-top: 10px;" onclick="finalizar()">FINALIZAR REGISTRO</button>
         </aside>
 
-        <div class="center-rotate">
-            <div class="arrow-rotate" onclick="rotacionar('esq')"><i class="fas fa-undo"></i></div>
-            <div class="arrow-rotate" onclick="rotacionar('dir')"><i class="fas fa-redo"></i></div>
-        </div>
+        <button class="btn-flutuante" onclick="finalizar()">FINALIZAR REGISTRO <i class="fas fa-arrow-right" style="margin-left: 8px;"></i></button>
     </div>
 
     <script>
         const audio = document.getElementById('myAudio');
         const musicIcon = document.getElementById('musicIcon');
 
-        // Controle de Música
         function togglePlay() {
             if (audio.paused) { audio.play(); musicIcon.classList.replace('fa-play', 'fa-pause'); } 
             else { audio.pause(); musicIcon.classList.replace('fa-pause', 'fa-play'); }
         }
         window.onload = () => { audio.play().catch(() => { musicIcon.classList.replace('fa-pause', 'fa-play'); }); };
 
-        // ================= FUNÇÕES DE LOGIN =================
         function login() {
             const pass = document.getElementById('login-pass').value;
             if (pass.length > 0 && window.geckoju) window.geckoju.send("login:" + pass);
@@ -159,8 +169,7 @@
             if (window.geckoju) {
                 window.geckoju.send("checkRegister:null");
             } else {
-                console.log("Modo de teste no PC: Abrindo tela de criação transparente...");
-                liberarCriacao();
+                liberarCriacao(); // Teste PC
             }
         }
 
@@ -177,23 +186,21 @@
             document.getElementById('creation-screen').style.display = 'flex';
         }
 
-        // ================= FUNÇÕES DE CRIAÇÃO (MEC) =================
+        // === FUNÇÃO: VOLTAR PARA O LOGIN COM A IMAGEM DE FUNDO ===
+        function voltarParaLogin() {
+            document.getElementById('creation-screen').style.display = 'none';
+            document.getElementById('login-screen').style.display = 'flex';
+            document.getElementById('main-bg-image').style.display = 'block';
+            document.getElementById('main-bg-overlay').style.display = 'block';
+        }
+
         function setGender(g) {
             document.querySelectorAll('#creation-screen .grid-options .box-opt').forEach(b => b.classList.remove('active'));
             document.getElementById(g.toLowerCase() + '-btn').classList.add('active');
             
-            // Envia os comandos cravados para não bugar o Pawn
             if(window.geckoju) {
                 if(g === 'M') window.geckoju.send("skin_homem");
                 if(g === 'F') window.geckoju.send("skin_mulher");
-            }
-        }
-
-        function rotacionar(lado) {
-            // A cada clique manda o comando de girar exato para o servidor
-            if(window.geckoju) {
-                if(lado === 'esq') window.geckoju.send("rot_esquerda");
-                if(lado === 'dir') window.geckoju.send("rot_direita");
             }
         }
         
