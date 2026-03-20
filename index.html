@@ -3,73 +3,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <title>Eixo Central - Login</title>
+    <title>Eixo Central - Conectar</title>
     <style>
-        :root { --primary-yellow: #f1c40f; }
-        .logo span { color: var(--primary-yellow) !important; }
-        .input-group i { color: var(--primary-yellow) !important; }
-        .btn-action.login, .btn-action.register { 
-            background: var(--primary-yellow) !important; 
-            color: black !important; 
+        :root { --primary-yellow: #f1c40f; --danger: #ff4444; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
+        body { background: transparent; overflow: hidden; height: 100vh; width: 100vw; display: flex; align-items: center; }
+
+        /* FUNDO E MÚSICA (Exibidos apenas no Login) */
+        #main-bg-image { position: fixed; width: 100%; height: 100%; object-fit: cover; z-index: 0; filter: brightness(0.5); }
+        #main-bg-overlay { position: fixed; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1; }
+        
+        /* Ícone de Música (Sempre visível) */
+        #musicIcon { position: fixed; top: 30px; right: 40px; z-index: 100; color: white; font-size: 22px; cursor: pointer; opacity: 0.6; }
+
+        /* ================= TELA DE LOGIN (Design Central) ================= */
+        #login-screen {
+            position: relative; z-index: 10; width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
         }
-        .footer-text span { color: var(--primary-yellow) !important; }
-        #error-msg {
-            color: #ff4444; font-size: 0.75rem; font-weight: 800;
-            text-align: center; margin-bottom: 15px; display: none; text-transform: uppercase;
+        .login-box {
+            width: 320px; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1); border-top: 4px solid var(--primary-yellow);
+            border-radius: 8px; padding: 30px 25px; color: white; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
+        .logo { font-weight: 800; font-size: 1.4rem; text-transform: uppercase; margin-bottom: 25px; }
+        .logo span { color: var(--primary-yellow); }
+        
+        .input-group { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 12px; border-radius: 4px; margin-bottom: 15px; display: flex; align-items: center; }
+        .input-group i { margin-right: 10px; color: var(--primary-yellow); }
+        .input-group input { background: none; border: none; color: white; outline: none; width: 100%; font-size: 0.8rem; }
+        
+        .btn-action { width: 100%; padding: 15px; border: none; border-radius: 4px; color: black; font-weight: 800; cursor: pointer; text-transform: uppercase; background: var(--primary-yellow); transition: 0.3s; margin-bottom: 10px; }
+        .btn-action:hover { filter: brightness(1.1); transform: translateY(-2px); }
+        .btn-action.register { background: transparent; color: var(--primary-yellow); border: 1px solid var(--primary-yellow); }
+        
+        #error-msg { color: var(--danger); font-size: 0.75rem; font-weight: 800; margin-bottom: 15px; display: none; text-transform: uppercase; }
+
+        /* ================= TELA DE CRIAÇÃO (Design Transparente/Achatado) ================= */
+        #creation-screen {
+            position: relative; z-index: 10; width: 100%; height: 100%;
+            display: none; /* COMEÇA ESCONDIDO */ align-items: center;
+            background: transparent !important; /* FORÇA A TRANSPARÊNCIA */
+        }
+        .creation-sidebar {
+            width: 280px; height: auto; max-height: 85vh; margin-left: 20px;
+            background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.1); border-left: 4px solid var(--primary-yellow);
+            border-radius: 8px; padding: 20px; color: white; display: flex; flex-direction: column;
+        }
+        .creation-sidebar h1 { font-weight: 800; font-size: 1rem; text-transform: uppercase; margin-bottom: 15px; text-align: center; }
+        .creation-sidebar h1 span { color: var(--primary-yellow); }
+        .section { margin-bottom: 12px; position: relative; }
+        .section p { font-weight: 600; font-size: 0.6rem; text-transform: uppercase; color: #aaa; margin-bottom: 6px; }
+        
+        .grid-options { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+        .box-opt { aspect-ratio: 1/1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.8rem; border-radius: 3px; transition: 0.2s; }
+        .box-opt.active { background: var(--primary-yellow); color: black; border-color: var(--primary-yellow); }
+        
+        .locked { opacity: 0.3; filter: grayscale(1); }
+        .badge-locked { position: absolute; top: 0; right: 0; background: var(--danger); color: white; font-size: 0.45rem; padding: 1px 4px; border-radius: 2px; }
+        
+        .center-rotate { position: absolute; left: 55%; top: 50%; transform: translate(-50%, -50%); width: 420px; display: flex; justify-content: space-between; pointer-events: none; }
+        .arrow-rotate { pointer-events: auto; background: rgba(0,0,0,0.5); border: 1px solid var(--primary-yellow); color: var(--primary-yellow); width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; cursor: pointer; transition: 0.2s; }
+        .arrow-rotate:active { background: var(--primary-yellow); color: black; transform: scale(0.9); }
     </style>
 </head>
 <body>
-    <div class="overlay"></div>
-    <div class="bg-container"><img src="fundo.png" id="bg-img"></div>
-
+    <img src="fundo.png" id="main-bg-image">
+    <div id="main-bg-overlay"></div>
     <i id="musicIcon" class="fas fa-pause" onclick="togglePlay()"></i>
     <audio id="myAudio" loop><source src="musica.mp3" type="audio/mpeg"></audio>
 
-    <div class="main-container">
-        <aside class="sidebar">
-            <div class="header"><h1 class="logo">EIXO<span>CENTRAL</span></h1></div>
-
-            <div class="glass-content">
-                <div id="error-msg">ESTA CONTA JÁ EXISTE!</div>
-
-                <div id="login-box" class="form-wrapper">
-                    <h2>CONECTAR</h2>
-                    <div class="input-group">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="login-pass" placeholder="SUA SENHA">
-                    </div>
-                    <button class="btn-action login" onclick="login()">ENTRAR NO SERVIDOR</button>
-                    <p class="footer-text">Novo por aqui? <span onclick="toggleForm('reg')">Criar conta</span></p>
-                </div>
-
-                <div id="register-box" class="form-wrapper" style="display: none;">
-                    <h2>BEM-VINDO</h2>
-                    <p style="color: #aaa; font-size: 0.7rem; margin-bottom: 20px;">Você não possui uma conta vinculada a este nome.</p>
-                    
-                    <button class="btn-action register" onclick="checkRegister()">CRIAR NOVO PERSONAGEM</button>
-                    <p class="footer-text">Já possui conta? <span onclick="toggleForm('log')">Voltar</span></p>
-                </div>
+    <div id="login-screen">
+        <div class="login-box">
+            <h1 class="logo">EIXO<span>CENTRAL</span></h1>
+            <div id="error-msg">ESTA CONTA JÁ EXISTE!</div>
+            
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="login-pass" placeholder="SUA SENHA">
             </div>
-        </aside>
+            
+            <button class="btn-action" onclick="login()">ENTRAR NO SERVIDOR</button>
+            <button class="btn-action register" onclick="checkRegister()">CRIAR NOVO PERSONAGEM</button>
+        </div>
     </div>
 
-    <script src="script.js"></script>
+    <div id="creation-screen">
+        <aside class="creation-sidebar">
+            <h1>CRIAR<span>PERSONAGEM</span></h1>
+
+            <div class="section">
+                <p>Defina sua Senha</p>
+                <div class="input-group" style="margin-bottom:0;">
+                    <input type="password" id="char-pass" placeholder="Senha da conta...">
+                </div>
+            </div>
+
+            <div class="section">
+                <p>Gênero</p>
+                <div class="grid-options">
+                    <div id="m-btn" class="box-opt" onclick="setGender('M', 58)"><i class="fas fa-mars"></i></div>
+                    <div id="f-btn" class="box-opt" onclick="setGender('F', 184)"><i class="fas fa-venus"></i></div>
+                </div>
+            </div>
+
+            <div class="section">
+                <p>Cor de Pele</p>
+                <div class="grid-options">
+                    <div class="box-opt" style="background: #ffdbac;" onclick="setSkin(1)"></div>
+                    <div class="box-opt" style="background: #e0ac69;" onclick="setSkin(3)"></div>
+                    <div class="box-opt" style="background: #8d5524;" onclick="setSkin(4)"></div>
+                    <div class="box-opt" style="background: #3b2219;" onclick="setSkin(5)"></div>
+                </div>
+            </div>
+
+            <div class="section">
+                <p>Cabelo</p>
+                <span class="badge-locked">BLOQUEADO</span>
+                <div class="grid-options locked">
+                    <div class="box-opt"><i class="fas fa-lock"></i></div>
+                    <div class="box-opt"><i class="fas fa-lock"></i></div>
+                </div>
+            </div>
+
+            <button class="btn-action" style="margin-top: 10px;" onclick="finalizar()">FINALIZAR REGISTRO</button>
+        </aside>
+
+        <div class="center-rotate">
+            <div class="arrow-rotate" onmousedown="startRotate(-5)" onmouseup="stopRotate()"><i class="fas fa-undo"></i></div>
+            <div class="arrow-rotate" onmousedown="startRotate(5)" onmouseup="stopRotate()"><i class="fas fa-redo"></i></div>
+        </div>
+    </div>
+
     <script>
-        function mostrarErroConta() {
-            document.getElementById('error-msg').style.display = 'block';
-            setTimeout(() => { document.getElementById('error-msg').style.display = 'none'; }, 5000);
+        const audio = document.getElementById('myAudio');
+        const musicIcon = document.getElementById('musicIcon');
+        let rotateTimer;
+
+        // Controle de Música
+        function togglePlay() {
+            if (audio.paused) { audio.play(); musicIcon.classList.replace('fa-play', 'fa-pause'); } 
+            else { audio.pause(); musicIcon.classList.replace('fa-pause', 'fa-play'); }
+        }
+        window.onload = () => { audio.play().catch(() => { musicIcon.classList.replace('fa-pause', 'fa-play'); }); };
+
+        // ================= FUNÇÕES DE LOGIN =================
+        function login() {
+            const pass = document.getElementById('login-pass').value;
+            if (pass.length > 0 && window.geckoju) window.geckoju.send("login:" + pass);
         }
 
-        // Função que só avisa o servidor que o cara quer criar conta
         function checkRegister() {
+            // No PC, para teste visual, forçamos a transição mec
             if (window.geckoju) {
-                // O servidor recebe o sinal "check", vê que não tem conta e abre o criacao.html
                 window.geckoju.send("checkRegister:null");
+            } else {
+                console.log("Modo de teste no PC: Abrindo tela de criação transparente...");
+                liberarCriacao();
             }
+        }
+
+        // ================= CHAMADAS PELO PAWN (Via Geckoju_SendEvent) =================
+        function mostrarErroConta() {
+            const err = document.getElementById('error-msg');
+            err.style.display = 'block';
+            setTimeout(() => { err.style.display = 'none'; }, 5000);
+        }
+
+        // CORREÇÃO: Remove o fundo e o overlay para ficar transparente sobre o jogo!
+        function liberarCriacao() {
+            // Esconde a Imagem de Fundo e o Overlay Escuro
+            document.getElementById('main-bg-image').style.display = 'none';
+            document.getElementById('main-bg-overlay').style.display = 'none';
+
+            // Esconde o Login e mostra a Criação
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('creation-screen').style.display = 'flex';
+        }
+
+        // ================= FUNÇÕES DE CRIAÇÃO =================
+        function setGender(g, skinId) {
+            document.querySelectorAll('#creation-screen .grid-options .box-opt').forEach(b => b.classList.remove('active'));
+            document.getElementById(g.toLowerCase() + '-btn').classList.add('active');
+            if(window.geckoju) window.geckoju.send("setGender:" + skinId);
+        }
+
+        function setSkin(id) { if(window.geckoju) window.geckoju.send("setSkinColor:" + id); }
+        function startRotate(val) { rotateTimer = setInterval(() => { if(window.geckoju) window.geckoju.send("rotateChar:" + val); }, 50); }
+        function stopRotate() { clearInterval(rotateTimer); }
+        
+        function finalizar() {
+            const pass = document.getElementById('char-pass').value;
+            if(pass.length < 4) return alert("Sua senha deve ter no mínimo 4 caracteres!");
+            if(window.geckoju) window.geckoju.send("finishCreation:" + pass);
         }
     </script>
 </body>
