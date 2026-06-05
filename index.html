@@ -3,230 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <title>Eixo Central - Conectar</title>
-    <style>
-        :root { --primary-yellow: #f1c40f; --danger: #ff4444; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
-        body { background: transparent; overflow: hidden; height: 100vh; width: 100vw; display: flex; align-items: center; }
-
-        /* FUNDO E MÚSICA (Exibidos apenas no Login) */
-        #main-bg-image { position: fixed; width: 100%; height: 100%; object-fit: cover; z-index: 0; filter: brightness(0.5); }
-        #main-bg-overlay { position: fixed; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1; }
-        
-        /* Ícone de Música */
-        #musicIcon { position: fixed; top: 30px; right: 40px; z-index: 100; color: white; font-size: 22px; cursor: pointer; opacity: 0.6; }
-
-        /* ================= TELA DE LOGIN ================= */
-        #login-screen {
-            position: relative; z-index: 10; width: 100%; height: 100%;
-            display: flex; justify-content: center; align-items: center;
-        }
-        .login-box {
-            width: 320px; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1); border-top: 4px solid var(--primary-yellow);
-            border-radius: 8px; padding: 30px 25px; color: white; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        .logo { font-weight: 800; font-size: 1.4rem; text-transform: uppercase; margin-bottom: 25px; }
-        .logo span { color: var(--primary-yellow); }
-        
-        .input-group { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 12px; border-radius: 4px; margin-bottom: 15px; display: flex; align-items: center; }
-        .input-group i { margin-right: 10px; color: var(--primary-yellow); }
-        .input-group input { background: none; border: none; color: white; outline: none; width: 100%; font-size: 0.8rem; }
-        
-        .btn-action { width: 100%; padding: 15px; border: none; border-radius: 4px; color: black; font-weight: 800; cursor: pointer; text-transform: uppercase; background: var(--primary-yellow); transition: 0.3s; margin-bottom: 10px; }
-        .btn-action:active { transform: scale(0.95); }
-        .btn-action.register { background: transparent; color: var(--primary-yellow); border: 1px solid var(--primary-yellow); }
-        
-        #error-msg { color: var(--danger); font-size: 0.75rem; font-weight: 800; margin-bottom: 15px; display: none; text-transform: uppercase; }
-
-        /* ================= TELA DE CRIAÇÃO ================= */
-        #creation-screen {
-            position: relative; z-index: 10; width: 100%; height: 100%;
-            display: none; align-items: center;
-            background: transparent !important;
-        }
-        .creation-sidebar {
-            width: 280px; height: auto; max-height: 85vh; margin-left: 20px;
-            background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255,255,255,0.1); border-left: 4px solid var(--primary-yellow);
-            border-radius: 8px; padding: 20px; color: white; display: flex; flex-direction: column;
-        }
-        .creation-sidebar h1 { font-weight: 800; font-size: 1rem; text-transform: uppercase; margin-bottom: 15px; text-align: center; }
-        .creation-sidebar h1 span { color: var(--primary-yellow); }
-        .section { margin-bottom: 12px; position: relative; }
-        .section p { font-weight: 600; font-size: 0.6rem; text-transform: uppercase; color: #aaa; margin-bottom: 6px; }
-        
-        .grid-options { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
-        .box-opt { aspect-ratio: 1/1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.8rem; border-radius: 3px; transition: 0.2s; }
-        .box-opt.active { background: var(--primary-yellow); color: black; border-color: var(--primary-yellow); }
-        
-        /* ESTILOS DE BLOQUEIO */
-        .locked { opacity: 0.3; filter: grayscale(1); pointer-events: none; }
-        .badge-locked { position: absolute; top: 0; right: 0; background: var(--danger); color: white; font-size: 0.45rem; padding: 1px 4px; border-radius: 2px; }
-
-        /* BOTÃO FINALIZAR SOLTO NO CANTO INFERIOR DIREITO */
-        .btn-flutuante {
-            position: absolute;
-            bottom: 30px;
-            right: 30px;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 4px;
-            color: black;
-            font-size: 0.9rem;
-            font-weight: 800;
-            cursor: pointer;
-            text-transform: uppercase;
-            background: var(--primary-yellow);
-            transition: 0.3s;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        .btn-flutuante:active { transform: scale(0.95); }
-    </style>
+    
+    <title>SKY PIXEL - Conectar</title>
+    
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <img src="fundo.png" id="main-bg-image">
+    <img src="fundo.png" id="main-bg-image" alt="Background">
     <div id="main-bg-overlay"></div>
-    <i id="musicIcon" class="fas fa-pause" onclick="togglePlay()"></i>
-    <audio id="myAudio" loop><source src="musica.mp3" type="audio/mpeg"></audio>
+
+    <audio id="myAudio" loop>
+        <source src="musica.mp3" type="audio/mpeg">
+    </audio>
 
     <div id="login-screen">
-        <div class="login-box">
-            <h1 class="logo">EIXO<span>CENTRAL</span></h1>
-            <div id="error-msg">ESTA CONTA JÁ EXISTE!</div>
+        <div class="fivem-dashboard">
             
-            <div class="input-group">
-                <i class="fas fa-lock"></i>
-                <input type="password" id="login-pass" placeholder="SUA SENHA">
+            <div class="login-section">
+                <span class="server-tag">Servidor Roleplay</span>
+                <h1 class="logo">SKY<span>PIXEL</span></h1>
+                
+                <div id="error-msg">ESTA CONTA JÁ EXISTE!</div>
+                
+                <div class="input-container">
+                    <span class="input-label">Acesso de Segurança</span>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="login-pass" placeholder="DIGITE SUA SENHA">
+                    </div>
+                    
+                    <button class="btn-action" onclick="login()">CONECTAR AO SERVIDOR</button>
+                    <button class="btn-action register" onclick="checkRegister()">CRIAR NOVO PERSONAGEM</button>
+                </div>
             </div>
-            
-            <button class="btn-action" onclick="login()">ENTRAR NO SERVIDOR</button>
-            <button class="btn-action register" onclick="checkRegister()">CRIAR NOVO PERSONAGEM</button>
+
+            <div class="info-section">
+                <div class="music-card">
+                    <div class="disc-art">
+                        <img src="capa.png" id="music-cover" alt="Capa da Música">
+                    </div>
+                    <div class="music-info">
+                        <div class="music-title">Trilha Sonora Ativa</div>
+                        <div class="music-author">Buscando do Servidor</div>
+                    </div>
+                    <div class="music-controls">
+                        <button class="control-btn"><i class="fas fa-step-backward"></i></button>
+                        <i id="musicIcon" class="fas fa-pause" onclick="togglePlay()"></i>
+                        <button class="control-btn"><i class="fas fa-step-forward"></i></button>
+                    </div>
+                </div>
+
+                <div class="server-card">
+                    <h3>Bem-vindo à Cidade</h3>
+                    <p>Desenvolva sua história em uma das estruturas mais otimizadas da atualidade. Leia nossas diretrizes no Discord, configure seus comandos e tenha uma excelente jornada em nosso ecossistema.</p>
+                </div>
+
+                <div class="social-row">
+                    <div class="social-btn"><i class="fab fa-discord"></i></div>
+                    <div class="social-btn"><i class="fab fa-instagram"></i></div>
+                    <div class="social-btn"><i class="fab fa-youtube"></i></div>
+                </div>
+            </div>
+
         </div>
     </div>
 
     <div id="creation-screen">
         <aside class="creation-sidebar">
-            <h1>CRIAR<span>PERSONAGEM</span></h1>
+            <h1>CRIAR<span>CIDADÃO</span></h1>
 
             <div class="section">
                 <p>Defina sua Senha</p>
-                <div class="input-group" style="margin-bottom:0;">
-                    <input type="password" id="char-pass" placeholder="Senha da conta...">
+                <div class="input-group font-creation-input">
+                    <input type="password" id="char-pass" placeholder="Senha mestre...">
                 </div>
             </div>
 
             <div class="section">
-                <p>Gênero</p>
+                <p>Gênero Base</p>
                 <div class="grid-options">
-                    <div id="m-btn" class="box-opt active" onclick="clicouHomem()"><i class="fas fa-mars"></i></div>
-                    <div id="f-btn" class="box-opt" onclick="clicouMulher()"><i class="fas fa-venus"></i></div>
+                    <div id="m-btn" class="box-opt active" onclick="clicouHomem()"><i class="fas fa-mars"></i> MASC</div>
+                    <div id="f-btn" class="box-opt" onclick="clicouMulher()"><i class="fas fa-venus"></i> FEM</div>
                 </div>
             </div>
 
             <div class="section">
-                <p>Cor de Pele</p>
-                <span class="badge-locked">BLOQUEADO</span>
+                <p>Etnia & Rosto</p>
+                <span class="badge-locked">IN-GAME</span>
                 <div class="grid-options locked">
-                    <div class="box-opt" style="background: #ffdbac;"><i class="fas fa-lock" style="color: rgba(0,0,0,0.5);"></i></div>
-                    <div class="box-opt" style="background: #e0ac69;"><i class="fas fa-lock" style="color: rgba(0,0,0,0.5);"></i></div>
-                    <div class="box-opt" style="background: #8d5524;"><i class="fas fa-lock" style="color: rgba(255,255,255,0.5);"></i></div>
-                    <div class="box-opt" style="background: #3b2219;"><i class="fas fa-lock" style="color: rgba(255,255,255,0.5);"></i></div>
+                    <div class="box-opt">PADRÃO 01</div>
+                    <div class="box-opt">PADRÃO 02</div>
                 </div>
             </div>
 
             <div class="section">
-                <p>Cabelo</p>
-                <span class="badge-locked">BLOQUEADO</span>
+                <p>Traços Visuais</p>
+                <span class="badge-locked">IN-GAME</span>
                 <div class="grid-options locked">
-                    <div class="box-opt"><i class="fas fa-lock"></i></div>
-                    <div class="box-opt"><i class="fas fa-lock"></i></div>
+                    <div class="box-opt">CABELO</div>
+                    <div class="box-opt">OLHOS</div>
                 </div>
             </div>
         </aside>
 
-        <button class="btn-flutuante" onclick="finalizar()">FINALIZAR REGISTRO <i class="fas fa-arrow-right" style="margin-left: 8px;"></i></button>
+        <button class="btn-flutuante" onclick="finalizar()">INICIAR JORNADA <i class="fas fa-chevron-right"></i></button>
     </div>
 
-    <script>
-        const audio = document.getElementById('myAudio');
-        const musicIcon = document.getElementById('musicIcon');
-        
-        // --- MEMÓRIA SIMPLES ---
-        let generoEscolhido = 'M'; // Começa como Homem
-
-        function togglePlay() {
-            if (audio.paused) { audio.play(); musicIcon.classList.replace('fa-play', 'fa-pause'); } 
-            else { audio.pause(); musicIcon.classList.replace('fa-pause', 'fa-play'); }
-        }
-        window.onload = () => { audio.play().catch(() => { musicIcon.classList.replace('fa-pause', 'fa-play'); }); };
-
-        function login() {
-            const pass = document.getElementById('login-pass').value;
-            if (pass.length > 0 && window.geckoju) window.geckoju.send("login:" + pass);
-        }
-
-        function checkRegister() {
-            if (window.geckoju) {
-                window.geckoju.send("checkRegister:null");
-            } else {
-                liberarCriacao(); // Teste PC
-            }
-        }
-
-        function mostrarErroConta() {
-            const err = document.getElementById('error-msg');
-            err.style.display = 'block';
-            setTimeout(() => { err.style.display = 'none'; }, 5000);
-        }
-
-        function liberarCriacao() {
-            document.getElementById('main-bg-image').style.display = 'none';
-            document.getElementById('main-bg-overlay').style.display = 'none';
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('creation-screen').style.display = 'flex';
-        }
-
-        function voltarParaLogin() {
-            document.getElementById('creation-screen').style.display = 'none';
-            document.getElementById('login-screen').style.display = 'flex';
-            document.getElementById('main-bg-image').style.display = 'block';
-            document.getElementById('main-bg-overlay').style.display = 'block';
-        }
-
-        // ================= FUNÇÕES SEPARADAS PARA CADA BOTÃO =================
-        function clicouHomem() {
-            // Atualiza o visual (borda amarela)
-            document.getElementById('m-btn').classList.add('active');
-            document.getElementById('f-btn').classList.remove('active');
-            
-            // Grava na memória e manda pro servidor
-            generoEscolhido = 'M';
-            if(window.geckoju) window.geckoju.send("btn_homem");
-        }
-
-        function clicouMulher() {
-            // Atualiza o visual (borda amarela)
-            document.getElementById('f-btn').classList.add('active');
-            document.getElementById('m-btn').classList.remove('active');
-            
-            // Grava na memória e manda pro servidor
-            generoEscolhido = 'F';
-            if(window.geckoju) window.geckoju.send("btn_mulher");
-        }
-        
-        // ================= FINALIZAR REGISTRO =================
-        function finalizar() {
-            const pass = document.getElementById('char-pass').value;
-            if(pass.length < 4) return alert("Sua senha deve ter no mínimo 4 caracteres!");
-            
-            // Manda o comando perfeito e limpo pro Pawn: "registrar|M|senha" ou "registrar|F|senha"
-            if(window.geckoju) {
-                window.geckoju.send("registrar|" + generoEscolhido + "|" + pass);
-            }
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
