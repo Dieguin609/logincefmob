@@ -1,9 +1,10 @@
 :root { 
-    --neon-blue: #00bfff; 
-    --neon-purple: #8a2be2;
+    --primary: #f39c12; /* Laranja Eixo Central */
+    --secondary: #f1c40f; /* Amarelo Eixo Central */
+    --danger: #e74c3c; /* Vermelho para erros */
     --bg-dark: #050508;
     --panel-bg: rgba(10, 10, 18, 0.65);
-    --border-glow: rgba(138, 43, 226, 0.2);
+    --border-glow: rgba(243, 156, 18, 0.2);
     --text-main: #ffffff;
     --text-sub: #70708a;
 }
@@ -33,7 +34,6 @@ body {
     height: 100%; 
     object-fit: cover; 
     z-index: 0; 
-    /* Filtro com opacidade e brilho bem baixos para destacar o painel frontal */
     filter: brightness(0.18) contrast(1.1) saturate(1.2); 
     opacity: 0.65;
 }
@@ -42,7 +42,8 @@ body {
     position: fixed; 
     width: 100%; 
     height: 100%; 
-    background: linear-gradient(135deg, rgba(5, 5, 8, 0.85) 0%, rgba(138, 43, 226, 0.12) 100%); 
+    /* Gradiente ajustado para o fundo Laranja/Amarelo */
+    background: linear-gradient(135deg, rgba(5, 5, 8, 0.85) 0%, rgba(243, 156, 18, 0.12) 100%); 
     z-index: 1; 
 }
 
@@ -70,9 +71,9 @@ body {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 3px;
-    color: var(--neon-blue);
+    color: var(--primary);
     margin-bottom: 5px;
-    text-shadow: 0 0 10px rgba(0, 191, 255, 0.4);
+    text-shadow: 0 0 10px rgba(243, 156, 18, 0.4);
 }
 
 .logo { 
@@ -85,8 +86,8 @@ body {
 }
 
 .logo span { 
-    color: var(--neon-purple);
-    text-shadow: 0 0 20px rgba(138, 43, 226, 0.6);
+    color: var(--secondary);
+    text-shadow: 0 0 20px rgba(241, 196, 15, 0.6);
 }
 
 .input-container {
@@ -116,14 +117,14 @@ body {
 }
 
 .input-group:focus-within { 
-    border-color: var(--neon-blue); 
-    box-shadow: 0 0 20px rgba(0, 191, 255, 0.15); 
-    background: rgba(0, 191, 255, 0.02); 
+    border-color: var(--primary); 
+    box-shadow: 0 0 20px rgba(243, 156, 18, 0.15); 
+    background: rgba(243, 156, 18, 0.02); 
 }
 
 .input-group i { 
     margin-right: 15px; 
-    color: var(--neon-blue); 
+    color: var(--primary); 
     font-size: 1.1rem; 
 }
 
@@ -144,22 +145,22 @@ body {
     padding: 18px; 
     border: none; 
     border-radius: 6px; 
-    color: white; 
-    font-weight: 700; 
+    color: #111; /* Texto escuro para contrastar com o botão amarelo */
+    font-weight: 900; 
     cursor: pointer; 
     text-transform: uppercase; 
     letter-spacing: 2px;
     font-size: 0.85rem;
-    background: var(--neon-blue); 
+    background: linear-gradient(135deg, var(--secondary), var(--primary)); 
     transition: all 0.3s ease; 
     margin-bottom: 15px;
-    box-shadow: 0 5px 20px rgba(0, 191, 255, 0.25);
+    box-shadow: 0 5px 20px rgba(243, 156, 18, 0.25);
 }
 
 .btn-action:hover { 
     transform: translateY(-2px); 
     filter: brightness(1.1); 
-    box-shadow: 0 8px 25px rgba(0, 191, 255, 0.4); 
+    box-shadow: 0 8px 25px rgba(243, 156, 18, 0.4); 
 }
 
 .btn-action.register { 
@@ -170,20 +171,20 @@ body {
 }
 
 .btn-action.register:hover { 
-    border-color: var(--neon-purple); 
-    background: rgba(138, 43, 226, 0.05);
-    box-shadow: 0 8px 25px rgba(138, 43, 226, 0.2);
+    border-color: var(--secondary); 
+    background: rgba(241, 196, 15, 0.05);
+    box-shadow: 0 8px 25px rgba(241, 196, 15, 0.2);
 }
 
 #error-msg { 
-    color: #ff3366; 
+    color: var(--danger); 
     font-size: 0.75rem; 
     font-weight: 700; 
     margin-bottom: 20px; 
     display: none; 
     text-transform: uppercase; 
     letter-spacing: 1px;
-    text-shadow: 0 0 10px rgba(255, 51, 102, 0.3);
+    text-shadow: 0 0 10px rgba(231, 76, 60, 0.3);
 }
 
 /* ================= COLUNA DIREITA: CARDS INFORMATIVOS ================= */
@@ -259,13 +260,13 @@ body {
 
 .control-btn:hover { 
     opacity: 1; 
-    color: var(--neon-blue); 
+    color: var(--primary); 
 }
 
 #musicIcon { 
     font-size: 1.4rem; 
     opacity: 1; 
-    color: var(--neon-blue); 
+    color: var(--primary); 
     cursor: pointer;
     transition: transform 0.2s;
 }
@@ -290,7 +291,7 @@ body {
     text-transform: uppercase; 
     letter-spacing: 1px; 
     margin-bottom: 10px; 
-    color: var(--neon-blue); 
+    color: var(--primary); 
 }
 
 .server-card p { 
@@ -320,9 +321,9 @@ body {
 }
 
 .social-btn:hover { 
-    background: rgba(138, 43, 226, 0.1); 
-    border-color: var(--neon-purple); 
-    color: var(--neon-purple); 
+    background: rgba(241, 196, 15, 0.1); 
+    border-color: var(--secondary); 
+    color: var(--secondary); 
     transform: translateY(-2px); 
 }
 
@@ -346,7 +347,7 @@ body {
     backdrop-filter: blur(20px); 
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.05); 
-    border-left: 4px solid var(--neon-blue);
+    border-left: 4px solid var(--primary);
     border-radius: 8px; 
     padding: 35px 25px; 
     display: flex; 
@@ -363,7 +364,7 @@ body {
 }
 
 .creation-sidebar h1 span { 
-    color: var(--neon-blue); 
+    color: var(--primary); 
 }
 
 .section { 
@@ -407,15 +408,15 @@ body {
 }
 
 .box-opt:hover { 
-    border-color: rgba(0, 191, 255, 0.3); 
+    border-color: rgba(243, 156, 18, 0.3); 
     color: white; 
 }
 
 .box-opt.active { 
-    background: var(--neon-blue); 
-    color: black; 
-    border-color: var(--neon-blue); 
-    box-shadow: 0 0 15px rgba(0, 191, 255, 0.25); 
+    background: linear-gradient(135deg, var(--secondary), var(--primary)); 
+    color: #111; 
+    border-color: var(--primary); 
+    box-shadow: 0 0 15px rgba(243, 156, 18, 0.25); 
 }
 
 .locked { 
@@ -428,7 +429,7 @@ body {
     position: absolute; 
     top: 0; 
     right: 0; 
-    background: #ff3366; 
+    background: var(--danger); 
     color: white; 
     font-size: 0.5rem; 
     font-weight: 800; 
@@ -445,19 +446,19 @@ body {
     padding: 20px 40px; 
     border: none; 
     border-radius: 6px;
-    color: white; 
+    color: #111; 
     font-size: 0.95rem; 
-    font-weight: 700;
+    font-weight: 900;
     cursor: pointer; 
     text-transform: uppercase; 
     letter-spacing: 2px;
-    background: linear-gradient(135deg, var(--neon-blue) 0%, var(--neon-purple) 100%); 
+    background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%); 
     transition: all 0.3s ease;
-    box-shadow: 0 10px 30px rgba(138, 43, 226, 0.3);
+    box-shadow: 0 10px 30px rgba(243, 156, 18, 0.3);
 }
 
 .btn-flutuante:hover { 
     transform: translateY(-3px); 
-    box-shadow: 0 15px 35px rgba(0, 191, 255, 0.4); 
+    box-shadow: 0 15px 35px rgba(243, 156, 18, 0.4); 
     filter: brightness(1.1); 
 }
