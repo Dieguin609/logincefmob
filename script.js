@@ -35,9 +35,13 @@ function login() {
 }
 
 function checkRegister() {
-    if (window.geckoju) window.geckoju.send("checkRegister:null");
-    else liberarCriacao();
-}
+            if (window.geckoju) {
+                // Manda um comando simples para o Pawn trocar o arquivo
+                window.geckoju.send("change_page:criacao.html");
+            } else {
+                console.log("Comando enviado: change_page:criacao.html");
+            }
+        }
 
 // --- 3. SELEÇÃO DE GÊNERO, PELE E ESTILO ---
 function setGender(g, skinId) {
