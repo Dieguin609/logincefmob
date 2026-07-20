@@ -245,6 +245,47 @@
             box-shadow: 0 8px 25px rgba(243, 156, 18, 0.4); 
             filter: brightness(1.1);
         }
+
+        /* ================= AJUSTE FINO MOBILE (AFUNDADO NAS BEIRADINHAS E COMPACTO) ================= */
+        @media (max-width: 768px) {
+            body { overflow-y: auto; }
+            .sidebar {
+                width: 90% !important;
+                max-width: 320px !important;
+                padding: 15px !important;
+                max-height: 85vh !important;
+            }
+            .preview-panel {
+                left: 10px !important; /* Bem colado na beiradinha esquerda */
+                right: auto;
+            }
+            .main-panel {
+                right: 10px !important; /* Bem colado na beiradinha direita */
+                left: auto;
+            }
+            /* Se a tela for muito estreita, empilha e centraliza com margens nas pontas */
+            @media (max-width: 650px) {
+                .sidebar {
+                    position: relative !important;
+                    top: auto !important;
+                    transform: none !important;
+                    margin: 15px auto !important;
+                    left: 0 !important;
+                    right: 0 !important;
+                    width: 92% !important;
+                }
+                body {
+                    display: block !important;
+                    overflow-y: auto !important;
+                }
+                .center-rotate {
+                    position: relative !important;
+                    top: auto !important;
+                    transform: none !important;
+                    margin: 10px auto !important;
+                }
+            }
+        }
     </style>
 </head>
 <body>
