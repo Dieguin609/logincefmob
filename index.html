@@ -201,6 +201,7 @@
     <script src="script.js"></script>
 
     <!-- JS de Controle de Login e Criação -->
+    <!-- JS de Controle de Login e Criação -->
     <script>
         let generoEscolhido = 1; 
         let peleEscolhida = 1;   
@@ -209,8 +210,10 @@
         window.addEventListener('DOMContentLoaded', () => {
             const savedName = localStorage.getItem('eixo_central_playername');
             if (savedName) {
-                document.getElementById('login-name').value = savedName;
-                document.getElementById('save-name-checkbox').checked = true;
+                document.getElementById('login-name').value; // Mantém compatibilidade
+                // Se houver input de nome na criação também, preenchemos se existir
+                const createNameInput = document.getElementById('creation-name');
+                if(createNameInput) createNameInput.value = savedName;
             }
         });
 
@@ -267,13 +270,32 @@
             }
         }
 
-        // Função para finalizar a criação de conta
+        // Alterna para a tela de registro validando o nome da tela inicial
+        function checkRegister() {
+            const playerName = document.getElementById('login-name').value.trim();
+            if(playerName === "") {
+                alert("Digite o nome desejado para o personagem na tela anterior antes de criar!");
+                return;
+            }
+            
+            // Passa o nome para o campo da tela de criação (se houver) e troca as telas
+            const createNameInput = document.getElementById('creation-name');
+            if(createNameInput) {
+                createNameInput.value = playerName;
+            }
+
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('creation-screen').style.display = 'block';
+        }
+
+        // Função para finalizar a criação de conta corrigida
         function finalizarCriacao() {
+            // Pega o nome diretamente do input da tela inicial (ou do input da criação se você decidir colocar)
             const playerName = document.getElementById('login-name').value.trim();
             const pass = document.getElementById('char-pass').value;
 
             if(playerName === "") {
-                alert("Volte na tela anterior e preencha o Nome do Personagem!");
+                alert("O nome do personagem não foi identificado. Volte à tela inicial!");
                 return;
             }
             if(pass.length < 4) {
@@ -289,17 +311,6 @@
             } else {
                 console.log("Simulando Criação (Fora do Jogo):", payload);
             }
-        }
-
-        // Alterna para a tela de registro (caso queira usar)
-        function checkRegister() {
-            const playerName = document.getElementById('login-name').value.trim();
-            if(playerName === "") {
-                alert("Digite o nome desejado para o personagem antes de criar!");
-                return;
-            }
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('creation-screen').style.display = 'block';
         }
     </script>
 </body>
