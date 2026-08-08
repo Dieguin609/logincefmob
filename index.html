@@ -31,22 +31,40 @@
         .logo { font-size: 2.5rem !important; margin-bottom: 20px !important; }
         .btn-action { padding: 14px !important; }
 
-        .btn-action {
+        /* Ajuste da sidebar de criação para não ser cortada */
+        .creation-sidebar {
+            width: 280px !important; /* Um pouco mais estreita */
+            padding: 20px !important;
+            margin-left: 20px !important;
+        }
+
+        .btn-action, .btn-flutuante, .box-opt.active {
             background: linear-gradient(135deg, #f1c40f, #e67e22) !important;
             color: #111 !important;
             border-color: #f39c12 !important;
             font-weight: 800 !important;
-            cursor: pointer;
-            transition: 0.3s;
         }
-
-        .btn-action:hover {
-            filter: brightness(1.1);
-            transform: translateY(-2px);
-        }
-
         .logo span, h1 span {
             color: var(--primary) !important;
+        }
+        .grid-options { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 5px; 
+        }
+        .box-opt {
+            aspect-ratio: auto; 
+            min-height: 35px; 
+            background: rgba(255,255,255,0.05); 
+            border: 1px solid rgba(255,255,255,0.1);
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            cursor: pointer; 
+            font-size: 0.7rem; 
+            border-radius: 3px; 
+            color: white;
+            transition: 0.3s;
         }
     </style>
 </head>
@@ -74,8 +92,8 @@
                         <input type="password" id="login-pass" placeholder="DIGITE SUA SENHA">
                     </div>
                     
-                    <button class="btn-action" onclick="fazerLogin()">CONECTAR AO SERVIDOR</button>
-                    <button class="btn-action register" onclick="abrirCriacao()">CRIAR NOVO PERSONAGEM</button>
+                    <button class="btn-action" onclick="login()">CONECTAR AO SERVIDOR</button>
+                    <button class="btn-action register" onclick="checkRegister()">CRIAR NOVO PERSONAGEM</button>
                 </div>
             </div>
 
@@ -110,43 +128,93 @@
         </div>
     </div>
 
+    <div id="creation-screen">
+        <aside class="creation-sidebar">
+            <h1>CRIAR<span>CIDADÃO</span></h1>
+
+            <div class="section">
+                <p>Defina sua Senha</p>
+                <div class="input-group font-creation-input">
+                    <input type="password" id="char-pass" placeholder="Senha mestre...">
+                </div>
+            </div>
+
+            <div class="section">
+                <p>Gênero Base</p>
+                <div class="grid-options">
+                    <div id="m-btn" class="box-opt active" onclick="setGender('M')"><i class="fas fa-mars"></i> MASC</div>
+                    <div id="f-btn" class="box-opt" onclick="setGender('F')"><i class="fas fa-venus"></i> FEM</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <p>Cor de Pele</p>
+                <div class="grid-options">
+                    <div id="pele-1" class="box-opt active" style="background: #ffdbac; color: black;" onclick="setSkin(1)">BRANCA</div>
+                    <div id="pele-2" class="box-opt" style="background: #8d5524; color: white;" onclick="setSkin(2)">NEGRA</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <p>Cabelo & Barba</p>
+                <span class="badge-locked">BARBEARIA (IN-GAME)</span>
+                <div class="grid-options locked">
+                    <div class="box-opt"><i class="fas fa-lock"></i> CABELO</div>
+                    <div class="box-opt"><i class="fas fa-lock"></i> BARBA</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Alterado para chamar a nova função finalizarCriacao() -->
+        <button class="btn-flutuante" onclick="finalizarCriacao()">INICIAR JORNADA <i class="fas fa-chevron-right"></i></button>
+    </div>
+
     <script src="script.js"></script>
 
-    <!-- JS FOCADO APENAS EM LOGIN E REDIRECIONAMENTO DE CRIAÇÃO -->
+    <!-- JS de Controle de Criação Integrado ao PAWN -->
     <script>
-        // Envia os dados de LOGIN para o Servidor Pawn -> (Após validar, abre o Spawn Selector no PAWN)
-        function fazerLogin() {
-            const passInput = document.getElementById('login-pass');
-            const pass = passInput.value.trim();
+        // Variáveis de Criação
+        let generoEscolhido = 1; // 1 = Masc, 2 = Fem
+        let peleEscolhida = 1;   // 1 = Branca, 2 = Negra
 
-            if (pass === "") {
-                alert("Por favor, digite sua senha para conectar!");
-                passInput.focus();
+        function setGender(g) {
+            document.getElementById('m-btn').classList.remove('active');
+            document.getElementById('f-btn').classList.remove('active');
+            
+            if(g === 'M') {
+                document.getElementById('m-btn').classList.add('active');
+                generoEscolhido = 1;
+            } else {
+                document.getElementById('f-btn').classList.add('active');
+                generoEscolhido = 2;
+            }
+        }
+
+        function setSkin(id) {
+            document.getElementById('pele-1').classList.remove('active');
+            document.getElementById('pele-2').classList.remove('active');
+            
+            document.getElementById('pele-' + id).classList.add('active');
+            peleEscolhida = id;
+        }
+
+        // Função para finalizar a criação e mandar os dados via Geckoju
+        function finalizarCriacao() {
+            const pass = document.getElementById('char-pass').value;
+            if(pass.length < 4) {
+                alert("Sua senha deve ter pelo menos 4 caracteres!");
                 return;
             }
-
-            if (window.geckoju) {
-                window.geckoju.send("login:" + pass);
+            
+            // Payload montado: finishCreation:SENHA|GENERO|PELE
+            let payload = "finishCreation:" + pass + "|" + generoEscolhido + "|" + peleEscolhida;
+            
+            if(window.geckoju) {
+                window.geckoju.send(payload);
             } else {
-                console.log("Simulando Envio (Fora do Jogo):", "login:" + pass);
+                console.log("Simulando Envio (Fora do Jogo):", payload);
             }
         }
-
-        // Avisa o servidor para fechar o login.html e abrir o arquivo separado de criação
-        function abrirCriacao() {
-            if (window.geckoju) {
-                window.geckoju.send("abrirTelaCriacao");
-            } else {
-                console.log("Simulando Envio (Fora do Jogo):", "abrirTelaCriacao");
-            }
-        }
-
-        // Suporte para apertar ENTER no input de senha e já logar
-        document.getElementById('login-pass').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                fazerLogin();
-            }
-        });
     </script>
 </body>
 </html>
