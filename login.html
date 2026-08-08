@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <title>EIXO CENTRAL - Conectar</title>
+    
+    <link rel="stylesheet" href="style.css">
+
+    <!-- CSS Injetado: Aplica o tema Amarelo/Laranja do Eixo Central -->
+    <style>
+        :root {
+            --primary: #f39c12; 
+            --primary-hover: #e67e22; 
+            --danger: #e74c3c;
+        }
+
+        /* AJUSTE PARA MOBILE (RESPONSIVIDADE) */
+        .fivem-dashboard {
+            width: 95% !important; /* Mais largo em telas pequenas */
+            max-width: 900px !important; /* Um pouco mais compacto para centralizar */
+            transform: scale(0.9); /* Diminui levemente o painel inteiro */
+            transform-origin: center;
+        }
+
+        /* Redução de margens e padding para não cortar */
+        .login-section { padding: 10px; }
+        .logo { font-size: 2.5rem !important; margin-bottom: 20px !important; }
+        .btn-action { padding: 14px !important; }
+
+        /* Ajuste da sidebar de criação para não ser cortada */
+        .creation-sidebar {
+            width: 280px !important; /* Um pouco mais estreita */
+            padding: 20px !important;
+            margin-left: 20px !important;
+        }
+
+        .btn-action, .btn-flutuante, .box-opt.active {
+            background: linear-gradient(135deg, #f1c40f, #e67e22) !important;
+            color: #111 !important;
+            border-color: #f39c12 !important;
+            font-weight: 800 !important;
+        }
+        .logo span, h1 span {
+            color: var(--primary) !important;
+        }
+        .grid-options { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 5px; 
+        }
+        .box-opt {
+            aspect-ratio: auto; 
+            min-height: 35px; 
+            background: rgba(255,255,255,0.05); 
+            border: 1px solid rgba(255,255,255,0.1);
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            cursor: pointer; 
+            font-size: 0.7rem; 
+            border-radius: 3px; 
+            color: white;
+            transition: 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <img src="fundo.png" id="main-bg-image" alt="Background">
+    <div id="main-bg-overlay"></div>
+
+    <audio id="myAudio" loop>
+        <source src="musica.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="login-screen">
+        <div class="fivem-dashboard">
+            
+            <div class="login-section">
+                <span class="server-tag">Servidor Roleplay</span>
+                <h1 class="logo">EIXO<span>CENTRAL</span></h1>
+                
+                <div id="error-msg">ESTA CONTA JÁ EXISTE!</div>
+                
+                <div class="input-container">
+                    <span class="input-label">Acesso de Segurança</span>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="login-pass" placeholder="DIGITE SUA SENHA">
+                    </div>
+                    
+                    <button class="btn-action" onclick="login()">CONECTAR AO SERVIDOR</button>
+                    <button class="btn-action register" onclick="checkRegister()">CRIAR NOVO PERSONAGEM</button>
+                </div>
+            </div>
+
+            <div class="info-section">
+                <div class="music-card">
+                    <div class="disc-art">
+                        <img src="capa.png" id="music-cover" alt="Capa da Música">
+                    </div>
+                    <div class="music-info">
+                        <div class="music-title">Trilha Sonora Ativa</div>
+                        <div class="music-author">Buscando do Servidor</div>
+                    </div>
+                    <div class="music-controls">
+                        <button class="control-btn"><i class="fas fa-step-backward"></i></button>
+                        <i id="musicIcon" class="fas fa-pause" onclick="togglePlay()"></i>
+                        <button class="control-btn"><i class="fas fa-step-forward"></i></button>
+                    </div>
+                </div>
+
+                <div class="server-card">
+                    <h3>Bem-vindo à Cidade</h3>
+                    <p>Desenvolva sua história em uma das estruturas mais otimizadas da atualidade. Leia nossas diretrizes no Discord, configure seus comandos e tenha uma excelente jornada em nosso ecossistema.</p>
+                </div>
+
+                <div class="social-row">
+                    <div class="social-btn"><i class="fab fa-discord"></i></div>
+                    <div class="social-btn"><i class="fab fa-instagram"></i></div>
+                    <div class="social-btn"><i class="fab fa-youtube"></i></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="creation-screen">
+        <aside class="creation-sidebar">
+            <h1>CRIAR<span>CIDADÃO</span></h1>
+
+            <div class="section">
+                <p>Defina sua Senha</p>
+                <div class="input-group font-creation-input">
+                    <input type="password" id="char-pass" placeholder="Senha mestre...">
+                </div>
+            </div>
+
+            <div class="section">
+                <p>Gênero Base</p>
+                <div class="grid-options">
+                    <div id="m-btn" class="box-opt active" onclick="setGender('M')"><i class="fas fa-mars"></i> MASC</div>
+                    <div id="f-btn" class="box-opt" onclick="setGender('F')"><i class="fas fa-venus"></i> FEM</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <p>Cor de Pele</p>
+                <div class="grid-options">
+                    <div id="pele-1" class="box-opt active" style="background: #ffdbac; color: black;" onclick="setSkin(1)">BRANCA</div>
+                    <div id="pele-2" class="box-opt" style="background: #8d5524; color: white;" onclick="setSkin(2)">NEGRA</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <p>Cabelo & Barba</p>
+                <span class="badge-locked">BARBEARIA (IN-GAME)</span>
+                <div class="grid-options locked">
+                    <div class="box-opt"><i class="fas fa-lock"></i> CABELO</div>
+                    <div class="box-opt"><i class="fas fa-lock"></i> BARBA</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Alterado para chamar a nova função finalizarCriacao() -->
+        <button class="btn-flutuante" onclick="finalizarCriacao()">INICIAR JORNADA <i class="fas fa-chevron-right"></i></button>
+    </div>
+
+    <script src="script.js"></script>
+
+    <!-- JS de Controle de Criação Integrado ao PAWN -->
+    <script>
+        // Variáveis de Criação
+        let generoEscolhido = 1; // 1 = Masc, 2 = Fem
+        let peleEscolhida = 1;   // 1 = Branca, 2 = Negra
+
+        function setGender(g) {
+            document.getElementById('m-btn').classList.remove('active');
+            document.getElementById('f-btn').classList.remove('active');
+            
+            if(g === 'M') {
+                document.getElementById('m-btn').classList.add('active');
+                generoEscolhido = 1;
+            } else {
+                document.getElementById('f-btn').classList.add('active');
+                generoEscolhido = 2;
+            }
+        }
+
+        function setSkin(id) {
+            document.getElementById('pele-1').classList.remove('active');
+            document.getElementById('pele-2').classList.remove('active');
+            
+            document.getElementById('pele-' + id).classList.add('active');
+            peleEscolhida = id;
+        }
+
+        // Função para finalizar a criação e mandar os dados via Geckoju
+        function finalizarCriacao() {
+            const pass = document.getElementById('char-pass').value;
+            if(pass.length < 4) {
+                alert("Sua senha deve ter pelo menos 4 caracteres!");
+                return;
+            }
+            
+            // Payload montado: finishCreation:SENHA|GENERO|PELE
+            let payload = "finishCreation:" + pass + "|" + generoEscolhido + "|" + peleEscolhida;
+            
+            if(window.geckoju) {
+                window.geckoju.send(payload);
+            } else {
+                console.log("Simulando Envio (Fora do Jogo):", payload);
+            }
+        }
+    </script>
+</body>
+</html>
