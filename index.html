@@ -201,7 +201,6 @@
     <script src="script.js"></script>
 
     <!-- JS de Controle de Login e Criação -->
-    <!-- JS de Controle de Login e Criação -->
     <script>
         let generoEscolhido = 1; 
         let peleEscolhida = 1;   
@@ -210,8 +209,7 @@
         window.addEventListener('DOMContentLoaded', () => {
             const savedName = localStorage.getItem('eixo_central_playername');
             if (savedName) {
-                document.getElementById('login-name').value; // Mantém compatibilidade
-                // Se houver input de nome na criação também, preenchemos se existir
+                document.getElementById('login-name').value = savedName; // CORRIGIDO: Agora atribui o valor corretamente
                 const createNameInput = document.getElementById('creation-name');
                 if(createNameInput) createNameInput.value = savedName;
             }
@@ -290,7 +288,7 @@
 
         // Função para finalizar a criação de conta corrigida
         function finalizarCriacao() {
-            // Pega o nome diretamente do input da tela inicial (ou do input da criação se você decidir colocar)
+            // Pega o nome diretamente do input da tela inicial (ou do input da criação se houver)
             const playerName = document.getElementById('login-name').value.trim();
             const pass = document.getElementById('char-pass').value;
 
