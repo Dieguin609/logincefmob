@@ -66,24 +66,6 @@
             color: white;
             transition: 0.3s;
         }
-
-        /* Estilo extra para o checkbox de salvar nome */
-        .checkbox-container {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: -8px;
-            margin-bottom: 10px;
-            font-size: 0.85rem;
-            color: #ccc;
-            cursor: pointer;
-        }
-        .checkbox-container input {
-            accent-color: var(--primary);
-            width: 16px;
-            height: 16px;
-            cursor: pointer;
-        }
     </style>
 </head>
 <body>
@@ -104,18 +86,6 @@
                 <div id="error-msg" style="display:none;">ESTA CONTA JÁ EXISTE!</div>
                 
                 <div class="input-container">
-                    <!-- Campo de Nome Personalizado -->
-                    <span class="input-label">Nome do Personagem (RP)</span>
-                    <div class="input-group" style="margin-bottom: 12px;">
-                        <i class="fas fa-user"></i>
-                        <input type="text" id="login-name" placeholder="Ex: Nome_Sobrenome">
-                    </div>
-
-                    <!-- Checkbox Salvar Nome -->
-                    <label class="checkbox-container">
-                        <input type="checkbox" id="save-name-checkbox" checked> Salvar meu nome para os próximos acessos
-                    </label>
-
                     <span class="input-label">Acesso de Segurança</span>
                     <div class="input-group">
                         <i class="fas fa-lock"></i>
@@ -205,16 +175,6 @@
         let generoEscolhido = 1; 
         let peleEscolhida = 1;   
 
-        // Carrega o nome salvo no navegador (localStorage) ao abrir a página
-        window.addEventListener('DOMContentLoaded', () => {
-            const savedName = localStorage.getItem('eixo_central_playername');
-            if (savedName) {
-                document.getElementById('login-name').value = savedName; // CORRIGIDO: Agora atribui o valor corretamente
-                const createNameInput = document.getElementById('creation-name');
-                if(createNameInput) createNameInput.value = savedName;
-            }
-        });
-
         function setGender(g) {
             document.getElementById('m-btn').classList.remove('active');
             document.getElementById('f-btn').classList.remove('active');
@@ -236,30 +196,17 @@
             peleEscolhida = id;
         }
 
-        // Função de Login atualizada lendo nome, senha e salvando preferência
+        // Envia apenas a senha (o servidor pegará o nome direto do APK/SA-MP)
         function fazerLogin() {
-            const playerName = document.getElementById('login-name').value.trim();
             const pass = document.getElementById('login-pass').value;
-            const saveName = document.getElementById('save-name-checkbox').checked;
 
-            if(playerName === "") {
-                alert("Por favor, digite o nome do seu personagem!");
-                return;
-            }
             if(pass === "") {
                 alert("Por favor, digite sua senha!");
                 return;
             }
 
-            // Gerencia o salvamento local do nome
-            if (saveName) {
-                localStorage.setItem('eixo_central_playername', playerName);
-            } else {
-                localStorage.removeItem('eixo_central_playername');
-            }
-
-            // Payload formatado para o Pawn: login:NOME|SENHA
-            let payload = "login:" + playerName + "|" + pass;
+            // Payload reduzido: login:SENHA
+            let payload = "login:" + pass;
             
             if(window.geckoju) {
                 window.geckoju.send(payload);
@@ -268,41 +215,23 @@
             }
         }
 
-        // Alterna para a tela de registro validando o nome da tela inicial
+        // Alterna direto para a tela de registro sem pedir nome
         function checkRegister() {
-            const playerName = document.getElementById('login-name').value.trim();
-            if(playerName === "") {
-                alert("Digite o nome desejado para o personagem na tela anterior antes de criar!");
-                return;
-            }
-            
-            // Passa o nome para o campo da tela de criação (se houver) e troca as telas
-            const createNameInput = document.getElementById('creation-name');
-            if(createNameInput) {
-                createNameInput.value = playerName;
-            }
-
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('creation-screen').style.display = 'block';
         }
 
-        // Função para finalizar a criação de conta corrigida
+        // Finaliza a criação enviando apenas senha, gênero e pele
         function finalizarCriacao() {
-            // Pega o nome diretamente do input da tela inicial (ou do input da criação se houver)
-            const playerName = document.getElementById('login-name').value.trim();
             const pass = document.getElementById('char-pass').value;
 
-            if(playerName === "") {
-                alert("O nome do personagem não foi identificado. Volte à tela inicial!");
-                return;
-            }
             if(pass.length < 4) {
                 alert("Sua senha deve ter pelo menos 4 caracteres!");
                 return;
             }
             
-            // Payload montado: finishCreation:NOME|SENHA|GENERO|PELE
-            let payload = "finishCreation:" + playerName + "|" + pass + "|" + generoEscolhido + "|" + peleEscolhida;
+            // Payload reduzido: finishCreation:SENHA|GENERO|PELE
+            let payload = "finishCreation:" + pass + "|" + generoEscolhido + "|" + peleEscolhida;
             
             if(window.geckoju) {
                 window.geckoju.send(payload);
